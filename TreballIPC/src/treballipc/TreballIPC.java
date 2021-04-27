@@ -25,9 +25,12 @@ public class TreballIPC extends Application{
     public static int confirmationCode = 0;
     
     public static Connect4 game;
+    public static SimpleBooleanProperty turn = new SimpleBooleanProperty(true);
     
     static Player j1;
     static Player j2;
+    
+    static int[][] state = new int[8][7];//////////////////////////////////////////////
     
     public static SimpleBooleanProperty playing = new SimpleBooleanProperty(false);
     
@@ -53,6 +56,111 @@ public class TreballIPC extends Application{
         launch(args);
     }
     
-
-
+   /*
+    Metode que donat un estat del joc (state) i una columna a la que col-locar la fitxa
+    el numero de la fila on cau la fitxa començant per baix; si no cap la fitxa torna un -1
+        0|
+        1|
+        2|
+        3|
+        4|
+        5|
+        6|
+    */
+    public static int buscarFila(int c) {
+        int i = 6;
+        int v = 0;
+        
+         while(v != 0 && i >= 0) {
+             v = state[c][i];
+             if(v == 0) { return i; }
+             i++;
+         }
+         return i;
+         
+    }
+            
+    
+    /*
+    
+    Torna la longitud de la cadena més llarga en fila.
+    Es considerarà victòria si la cadena supera o iguala els 4 de longitud
+    */
+    public static int esFinalDeJoc(int c, int f) {
+        if(c < 0 || f < 0) {
+            return -99; //algo ha anat terriblement mal, crideu-me
+        }
+        
+        return Math.max(Math.max(buscarVert(c,f),buscarHorz(c,f)),
+                Math.max(buscarDiag1(c,f),buscarDiag2(c,f)));
+    }
+    
+   public static int buscarHorz(int c,int f) {
+       int i = 0;
+       int res = 0;
+       while(f < 7 && state[c][f] == state[c][f+i]) {
+           res++;
+           i++;
+       }
+       i = 0;
+       
+       while(f >= 0 && state[c][f] == state[c][f+i]) {
+           res++;
+           i--;
+       }
+       
+       return res;
+   }
+   public static int buscarVert(int c,int f) {
+       int i = 0;
+       int res = 0;
+       while(c < 8 && state[c][f] == state[c+i][f]) {
+           res++;
+           i++;
+       }
+       i = 0;
+       
+       while(c >= 0 && state[c][f] == state[c+i][f]) {
+           res++;
+           i--;
+       }
+       
+       return res;
+   }
+   public static int buscarDiag1(int c,int f) {
+       int i = 0;
+       int res = 0;
+       while((c+i < 7 && f+i < 8) && state[c][f] == state[c+i][f+i]) {
+           res++;
+           i++;
+       }
+       i = 0;
+       
+       while(c+i >= 0 && f+i >= 0 && state[c][f] == state[c+i][f+i]) {
+           res++;
+           i--;
+       }
+       
+       return res;
+   }
+   public static int buscarDiag2(int c,int f) {
+       int i = 0;
+       int res = 0;
+       while((c+i < 7 && f-i >= 0) && state[c][f] == state[c+i][f-1]) {
+           res++;
+           i++;
+       }
+       i = 0;
+       
+       while((c+i >= 0 && f-i < 8)&& state[c][f] == state[c+i][f-1]) {
+           res++;
+           i--;
+       }
+       
+       return res;
+   }
 }
+    
+    
+
+
