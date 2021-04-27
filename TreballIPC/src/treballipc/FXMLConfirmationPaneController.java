@@ -37,6 +37,9 @@ public class FXMLConfirmationPaneController {
             FXMLIniciSessioController.confirCode.setValue(FXMLIniciSessioController.confirCode.getValue()+1);
             ((Stage) errorMessage.getScene().getWindow()).close();
         }
+        else {
+            errorMessage.setText("El codi introduit no es correpon amb el que s'ha enviat");
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

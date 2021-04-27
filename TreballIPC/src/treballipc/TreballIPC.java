@@ -29,6 +29,8 @@ public class TreballIPC extends Application{
     static Player j1;
     static Player j2;
     
+    public static SimpleBooleanProperty playing = new SimpleBooleanProperty(false);
+    
     @Override
     public void start(Stage stage) throws Exception {
         

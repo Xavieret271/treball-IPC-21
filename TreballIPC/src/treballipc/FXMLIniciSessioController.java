@@ -106,7 +106,12 @@ public class FXMLIniciSessioController {
                 stage2.show();
             
                 ((Stage) cancelButton.getScene().getWindow()).close();
-        }}
+            }
+        
+            else {
+                    errorMessage.setText("El correu electronic no correspon amb el nom d'usuari aportat");
+            }
+        }
         else {
             boolean loginWorked = false;
         if(TreballIPC.game.exitsNickName(usernameField.getText())) {

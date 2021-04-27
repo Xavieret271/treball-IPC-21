@@ -213,20 +213,29 @@ public class FXMLDocumentController {
     ///// funcions del panel de joc no es bonic pero es el que hi ha
     
     
-    
+    SimpleBooleanProperty vbox1hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox2hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox3hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox4hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox5hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox6hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox7hover = new SimpleBooleanProperty(false);
+    SimpleBooleanProperty vbox8hover = new SimpleBooleanProperty(false);
     
     @FXML
     void vbox1click(MouseEvent event) {
+        
     }
 
     @FXML
     void vbox1hover(MouseEvent event) {
-
+        vbox1hover.setValue(true);
     }
 
     @FXML
     void vbox1nohover(MouseEvent event) {
-
+        
+        vbox1hover.setValue(false);
     }
 
     @FXML
@@ -236,11 +245,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox2hover(MouseEvent event) {
+        vbox2hover.setValue(true);
 
     }
 
     @FXML
     void vbox2nohover(MouseEvent event) {
+        vbox2hover.setValue(false);
 
     }
 
@@ -251,11 +262,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox3hover(MouseEvent event) {
+        vbox3hover.setValue(true);
 
     }
 
     @FXML
     void vbox3nohover(MouseEvent event) {
+        vbox3hover.setValue(false);
 
     }
 
@@ -266,11 +279,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox4hover(MouseEvent event) {
+        vbox4hover.setValue(true);
 
     }
 
     @FXML
     void vbox4nohover(MouseEvent event) {
+        vbox4hover.setValue(false);
 
     }
 
@@ -281,11 +296,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox5hover(MouseEvent event) {
+        vbox5hover.setValue(true);
 
     }
 
     @FXML
     void vbox5nohover(MouseEvent event) {
+        vbox5hover.setValue(false);
 
     }
 
@@ -296,11 +313,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox6hover(MouseEvent event) {
+        vbox6hover.setValue(true);
 
     }
 
     @FXML
     void vbox6nohover(MouseEvent event) {
+        vbox6hover.setValue(false);
 
     }
 
@@ -311,11 +330,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox7hover(MouseEvent event) {
+        vbox7hover.setValue(true);
 
     }
 
     @FXML
     void vbox7nohover(MouseEvent event) {
+        vbox7hover.setValue(false);
 
     }
 
@@ -326,11 +347,13 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox8hover(MouseEvent event) {
+        vbox8hover.setValue(true);
 
     }
 
     @FXML
     void vbox8nohover(MouseEvent event) {
+        vbox8hover.setValue(false);
 
     }
 }
