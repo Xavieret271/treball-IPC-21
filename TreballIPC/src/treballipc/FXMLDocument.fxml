@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLDocumentController">
+   <left>
+      <ToolBar maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="40.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <items>
+            <Button fx:id="registerButton" mnemonicParsing="false" onMouseClicked="#registerOpen" text="Registrar-se" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#loginStart" text="Iniciar Sessio" />
+            <Button fx:id="singleplayerButton" mnemonicParsing="false" text="1 Jugador" visible="false" />
+            <Button fx:id="multiplayerButton" mnemonicParsing="false" text="2 Jugadors" visible="false" />
+            <Pane prefHeight="190.0" prefWidth="200.0" />
+            <Button fx:id="staticsButton" disable="true" mnemonicParsing="false" onMouseClicked="#statsStart" text="Estadistiques" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutJ1" text="Tancar Sessio" visible="false" />
+            <CheckBox fx:id="highContrast" disable="true" mnemonicParsing="false" onAction="#setContrast" selected="true" text="Alt Contrast" />
+         </items>
+      </ToolBar>
+   </left>
+</BorderPane>
