@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="302.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLIniciSessioController">
+   <children>
+      <TextField fx:id="usernameField" promptText="Nom Usuari">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin></TextField>
+      <Label text=" " />
+      <PasswordField fx:id="passField" promptText="Contrasenya" />
+      <TextField fx:id="emailField" promptText="Correu Electronic" visible="false" />
+      <Label fx:id="forgotPassLink" onMouseClicked="#forgotPass" text="Has oblidat la contrasenya?" textFill="BLUE" underline="true" />
+      <Label fx:id="errorMessage" text=" " textFill="RED" />
+      <Label fx:id="advertLabel" text="S'enviara un correu electronic amb un codi per a la recuperacio" visible="false" wrapText="true" />
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelWindow" text="Cancellar" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginAttm" text="Iniciar Sessio" />
+        </items>
+      </ToolBar>
+   </children>
+</VBox>
