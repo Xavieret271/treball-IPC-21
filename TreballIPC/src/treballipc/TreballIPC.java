@@ -8,6 +8,7 @@ package treballipc;
 import model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import java.io.File;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,6 +28,8 @@ public class TreballIPC extends Application{
     public static Connect4 game;
     public static SimpleBooleanProperty turn = new SimpleBooleanProperty(true);
     
+    static int activePlayer = 1; // 0 per a j1 i 1 per a j2
+    
     static Player j1;
     static Player j2;
     
@@ -41,6 +44,7 @@ public class TreballIPC extends Application{
         game.removeAllData();
         game.createDemoData(6,10,10);
         
+        File file = new File("FXMLDocument.fxml");
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
@@ -67,16 +71,24 @@ public class TreballIPC extends Application{
         5|
         6|
     */
+    
+    public static int clavarFitxa(int c) {
+        return buscarFila(c);
+        
+    }
     public static int buscarFila(int c) {
         int i = 6;
-        int v = 0;
+        int v;
         
-         while(v != 0 && i >= 0) {
+         while(i >0) {
              v = state[c][i];
-             if(v == 0) { return i; }
-             i++;
+             if(v != 0 && state[c][i-1] == 0) { return i-1; }
+             if(i == 6 && v == 0) { return i; }
+             i--;
          }
-         return i;
+         
+         
+         return -1;
          
     }
             
@@ -96,41 +108,41 @@ public class TreballIPC extends Application{
     }
     
    public static int buscarHorz(int c,int f) {
-       int i = 0;
+       int i = 1;
        int res = 0;
-       while(f < 7 && state[c][f] == state[c][f+i]) {
+       while(c+i < 7 && state[c][f] == state[c+i][f]) {
            res++;
            i++;
        }
        i = 0;
        
-       while(f >= 0 && state[c][f] == state[c][f+i]) {
+       while(c+i>= 0 && state[c][f] == state[c+i][f]) {
            res++;
            i--;
        }
        
-       return res;
+       return res--;
    }
    public static int buscarVert(int c,int f) {
-       int i = 0;
+       int i = 1;
        int res = 0;
-       while(c < 8 && state[c][f] == state[c+i][f]) {
+       while(f+i < 7 && state[c][f] == state[c][f+i]) {
            res++;
            i++;
        }
        i = 0;
        
-       while(c >= 0 && state[c][f] == state[c+i][f]) {
+       while(f+i >= 0 && state[c][f] == state[c][f+i]) {
            res++;
            i--;
        }
        
-       return res;
+       return res--;
    }
    public static int buscarDiag1(int c,int f) {
-       int i = 0;
+       int i = 1;
        int res = 0;
-       while((c+i < 7 && f+i < 8) && state[c][f] == state[c+i][f+i]) {
+       while((c+i < 8 && f+i < 7) && state[c][f] == state[c+i][f+i]) {
            res++;
            i++;
        }
@@ -141,23 +153,23 @@ public class TreballIPC extends Application{
            i--;
        }
        
-       return res;
+       return res--;
    }
    public static int buscarDiag2(int c,int f) {
-       int i = 0;
+       int i = 1;
        int res = 0;
-       while((c+i < 7 && f-i >= 0) && state[c][f] == state[c+i][f-1]) {
+       while((c+i < 8 && f-i >= 0) && state[c][f] == state[c+i][f-i]) {
            res++;
            i++;
        }
        i = 0;
        
-       while((c+i >= 0 && f-i < 8)&& state[c][f] == state[c+i][f-1]) {
+       while((c+i >= 0 && f-i < 7)&& state[c][f] == state[c+i][f-i]) {
            res++;
            i--;
        }
        
-       return res;
+       return res--;
    }
 }
     
