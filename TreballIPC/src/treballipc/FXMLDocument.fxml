@@ -38,6 +38,23 @@
                   <Font size="42.0" />
                </font>
             </Label>
+            <HBox prefHeight="21.0" prefWidth="414.0">
+               <children>
+                  <VBox prefHeight="42.0" prefWidth="65.0">
+                     <children>
+                        <Label fx:id="j1" prefHeight="21.0" prefWidth="80.0" text="Jugador1" />
+                        <Label fx:id="p1" text="0" textFill="#0095ff" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="42.0" prefWidth="79.0">
+                     <children>
+                        <Label fx:id="j2" prefHeight="21.0" prefWidth="80.0" text="Jugador2" />
+                        <Label fx:id="p2" text="0" textFill="#0095ff" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="24.0" prefWidth="500.0" />
             <HBox fx:id="panel" disable="true" prefHeight="289.0" prefWidth="440.0">
                <children>
                   <VBox fx:id="vbox1" onMouseClicked="#vbox1click" onMouseEntered="#vbox1hover" onMouseExited="#vbox1nohover" prefHeight="200.0" prefWidth="100.0">
