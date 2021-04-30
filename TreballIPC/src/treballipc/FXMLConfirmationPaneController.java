@@ -80,4 +80,27 @@ public class FXMLConfirmationPaneController {
         
                     ((Stage) cancelButton.getScene().getWindow()).close();
     }
+    
+    @FXML
+    void confirmHover(MouseEvent event) {
+        confirmButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #4f4f4f");
+    }
+
+    @FXML
+    void confirmNoHover(MouseEvent event) {
+        confirmButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #4f4f4f");
+
+    }
+
+    @FXML
+    void cancelHover(MouseEvent event) {
+        cancelButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #4f4f4f");
+
+    }
+
+    @FXML
+    void cancelNoHover(MouseEvent event) {
+        cancelButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #4f4f4f");
+
+    }
 }

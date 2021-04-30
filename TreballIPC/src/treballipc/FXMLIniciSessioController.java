@@ -178,12 +178,12 @@ public class FXMLIniciSessioController {
     }
     @FXML
     void oblitNoHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+            forgotPassLink.setStyle("-fx-text-fill:BLUE");
 
     }
     @FXML
     void oblitHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+            forgotPassLink.setStyle("-fx-text-fill:#8A2BE2");
 
     }
 }

@@ -17,6 +17,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,6 +40,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.stage.WindowEvent;
 
 public class FXMLDocumentController {
 
@@ -308,7 +311,9 @@ public class FXMLDocumentController {
     private Button closingButton;
     @FXML
     void endMe(ActionEvent event) {
-                ((Stage) closingButton.getScene().getWindow()).close();
+        ai.interrupt();
+        aiplacing.interrupt();
+        ((Stage)loginButton.getScene().getWindow()).close();
     }
     
     @FXML
@@ -322,6 +327,7 @@ public class FXMLDocumentController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("Inici de Sessio Jugador 1");
         /////
     }
 
@@ -338,6 +344,7 @@ public class FXMLDocumentController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+        
         
         /////
     }
@@ -361,6 +368,7 @@ public class FXMLDocumentController {
         Stage pou = new Stage();
         pou.setScene(pot);
         pou.show();
+        pou.setTitle("Inici Sessio Jugador 2");
 
     }
     
@@ -379,7 +387,7 @@ public class FXMLDocumentController {
 
     public static SimpleBooleanProperty loggedIn = new SimpleBooleanProperty(false);
     
-    
+    static Thread ai;
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         
@@ -422,7 +430,8 @@ public class FXMLDocumentController {
                 p2.setVisible(false);
         
         
-            new Thread(aivsai).start();
+            ai  = new Thread(aivsai);
+            ai.start();
 
                 
         loggedIn.addListener( //EXEMPLE DE LISTENER!!!!
@@ -456,8 +465,9 @@ public class FXMLDocumentController {
             (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
                 
                     paneInit();
-                    try{((Thread) task2).interrupt();} catch(Exception e){}
                 if(TreballIPC.playing.getValue()){
+                    ai.interrupt();
+                    aiplacing.interrupt();
                 j1.setText(TreballIPC.j1.getNickName());
                 
                 j1.setVisible(true);
@@ -477,6 +487,8 @@ public class FXMLDocumentController {
                     logoutButton.setVisible(true);
                 }
                 else {
+                    ai = new Thread(aivsai);
+                    ai.start();
                 
                     j1.setVisible(false);
                     j2.setVisible(false);
@@ -486,7 +498,6 @@ public class FXMLDocumentController {
                     panel.setOpacity(0.5);
                     loggedIn.setValue(false);
                     
-                    (new Thread(aivsai)).start();
                 }
             });
 
@@ -523,7 +534,7 @@ public class FXMLDocumentController {
             pane[c][f].setImage(cross);
         }
     }
-    
+    static Thread aiplacing;
     void runAI() {
         if(!aiing &&(!TreballIPC.playing.getValue()||!TreballIPC.multiplayer)) {
             
@@ -533,7 +544,8 @@ public class FXMLDocumentController {
             wagi = (0);
             aiing = true;
             
-            new Thread(task2).start();
+            aiplacing = new Thread(task2);
+            aiplacing.start();
             
         }
     }
@@ -1048,5 +1060,7 @@ public class FXMLDocumentController {
             singleplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
+    
+     
 }
 
