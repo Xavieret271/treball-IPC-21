@@ -88,6 +88,7 @@ public class FXMLIniciSessioController {
             if(TreballIPC.game.exitsNickName(usernameField.getText()) && 
                     TreballIPC.game.getPlayer(usernameField.getText()).getEmail().equals(emailField.getText())) {
                 confirCode.setValue((int) (Math.random()*999999));
+                TreballIPC.retrievingJ = TreballIPC.game.getPlayer(usernameField.getText());
                 Parent root = FXMLLoader.load(getClass().getResource("FXMLConfirmationPane.fxml"));
             
                 Scene scene = new Scene(root);
@@ -116,15 +117,19 @@ public class FXMLIniciSessioController {
             boolean loginWorked = false;
         if(TreballIPC.game.exitsNickName(usernameField.getText())) {
             if(TreballIPC.game.getPlayer(usernameField.getText()).checkCredentials(usernameField.getText(), passField.getText())) {
-                if(TreballIPC.j1 == null) {
-                TreballIPC.j1 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
+                if(!FXMLDocumentController.loggedIn.getValue()) {
+                    TreballIPC.j1 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
+                
+                    FXMLDocumentController.loggedIn.setValue(true);
+                    ((Stage) cancelButton.getScene().getWindow()).close();
                 }
                 else {
-                TreballIPC.j2 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
-                TreballIPC.multiplayer = true;}
-                FXMLDocumentController.loggedIn.setValue(true);
+                    TreballIPC.j2 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
+                    TreballIPC.multiplayer = true;
+                    TreballIPC.playing.setValue(true);
+                    ((Stage) cancelButton.getScene().getWindow()).close();
+                }
                 errorMessage.setText("");
-                ((Stage) cancelButton.getScene().getWindow()).close();
             }
             else{
                 errorMessage.setText("L'usuari i la contrasenya no coincideixen");
@@ -144,6 +149,41 @@ public class FXMLIniciSessioController {
         assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
         assert errorMessage != null : "fx:id=\"errorMessage\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
         assert loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
+            forgot = false;
+    }
+    @FXML
+    void cancelHover(MouseEvent event) {
+            cancelButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
+
+    }
+    
+    @FXML
+    void cancelNoHover(MouseEvent event) {
+            cancelButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+    
+    
+    @FXML
+    void loginHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
+
+    }
+    
+    
+    @FXML
+    void loginNoHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+    @FXML
+    void oblitNoHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+    @FXML
+    void oblitHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
 }
