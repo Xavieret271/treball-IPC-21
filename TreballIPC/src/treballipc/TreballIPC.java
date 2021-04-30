@@ -9,10 +9,14 @@ import model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import java.io.File;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.image.ImageView;
 
 
 /**
@@ -30,9 +34,9 @@ public class TreballIPC extends Application{
     
     static int activePlayer = 1; // 0 per a j1 i 1 per a j2
     
-    static Player j1;
-    static Player j2;
-    
+    static Player j1 = null;
+    static Player j2 = null;
+    static Player retrievingJ = null;
     static boolean multiplayer = false;
     
     static int[][] state = new int[8][7];//////////////////////////////////////////////
@@ -100,78 +104,90 @@ public class TreballIPC extends Application{
     Torna la longitud de la cadena més llarga en fila.
     Es considerarà victòria si la cadena supera o iguala els 4 de longitud
     */
-    public static int esFinalDeJoc(int c, int f) {
+    public static List<ImageView> esFinalDeJoc(int c, int f) {
         if(c < 0 || f < 0) {
-            return -99; //algo ha anat terriblement mal, crideu-me
+            return null; //algo ha anat terriblement mal, crideu-me
         }
-        
-        return Math.max(Math.max(buscarVert(c,f),buscarHorz(c,f)),
-                Math.max(buscarDiag1(c,f),buscarDiag2(c,f)));
+        List<ImageView> res = buscarHorz(c,f);
+        List<ImageView> res2 = buscarVert(c,f);
+        if(res.size() > res2.size()) {}
+        else { res = res2; }
+        res2 = buscarDiag1(c,f);
+        if(res.size() > res2.size()) {}
+        else { res = res2; }
+        res2 = buscarDiag2(c,f);
+        if(res.size() > res2.size()) {}
+        else { res = res2; }
+        return res;
     }
     
-   public static int buscarHorz(int c,int f) {
+   public static List<ImageView> buscarHorz(int c,int f) {
        int i = 1;
-       int res = 0;
+       List<ImageView> res = new LinkedList<ImageView>();
+       res.add(FXMLDocumentController.pane[c][f]);
        while(c+i < 7 && state[c][f] == state[c+i][f]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f]);
            i++;
        }
-       i = 0;
+       i = -1;
        
        while(c+i>= 0 && state[c][f] == state[c+i][f]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f]);
            i--;
        }
        
-       return res--;
+       return res;
    }
-   public static int buscarVert(int c,int f) {
+   public static List<ImageView> buscarVert(int c,int f) {
        int i = 1;
-       int res = 0;
+       List<ImageView> res = new LinkedList<ImageView>();
+       res.add(FXMLDocumentController.pane[c][f]);
        while(f+i < 7 && state[c][f] == state[c][f+i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c][f+i]);
            i++;
        }
-       i = 0;
+       i = -1;
        
        while(f+i >= 0 && state[c][f] == state[c][f+i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c][f+i]);
            i--;
        }
        
-       return res--;
+       return res;
    }
-   public static int buscarDiag1(int c,int f) {
+   public static List<ImageView> buscarDiag1(int c,int f) {
        int i = 1;
-       int res = 0;
+       List<ImageView> res = new LinkedList<ImageView>();
+       res.add(FXMLDocumentController.pane[c][f]);
        while((c+i < 8 && f+i < 7) && state[c][f] == state[c+i][f+i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f+i]);
            i++;
        }
-       i = 0;
+       i = -1;
        
        while(c+i >= 0 && f+i >= 0 && state[c][f] == state[c+i][f+i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f+i]);
            i--;
        }
        
-       return res--;
+       return res;
    }
-   public static int buscarDiag2(int c,int f) {
+   public static List<ImageView> buscarDiag2(int c,int f) {
        int i = 1;
-       int res = 0;
+       List<ImageView> res = new LinkedList<ImageView>();
+       res.add(FXMLDocumentController.pane[c][f]);
        while((c+i < 8 && f-i >= 0) && state[c][f] == state[c+i][f-i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f-i]);
            i++;
        }
-       i = 0;
+       i = -1;
        
        while((c+i >= 0 && f-i < 7)&& state[c][f] == state[c+i][f-i]) {
-           res++;
+           res.add(FXMLDocumentController.pane[c+i][f-i]);
            i--;
        }
        
-       return res--;
+       return res;
    }
 }
     
