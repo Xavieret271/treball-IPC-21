@@ -116,7 +116,12 @@ public class FXMLIniciSessioController {
             boolean loginWorked = false;
         if(TreballIPC.game.exitsNickName(usernameField.getText())) {
             if(TreballIPC.game.getPlayer(usernameField.getText()).checkCredentials(usernameField.getText(), passField.getText())) {
+                if(TreballIPC.j1 == null) {
                 TreballIPC.j1 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
+                }
+                else {
+                TreballIPC.j2 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
+                TreballIPC.multiplayer = true;}
                 FXMLDocumentController.loggedIn.setValue(true);
                 errorMessage.setText("");
                 ((Stage) cancelButton.getScene().getWindow()).close();

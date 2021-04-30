@@ -5,11 +5,16 @@
 package treballipc;
 
 import model.*;
+import java.io.File;
+import javafx.concurrent.Service;
 import java.net.URL;
 import javafx.beans.value.ObservableValue;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +26,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.image.ImageView;
+ import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.geometry.Insets;
+import javafx.scene.paint.Paint;
 
 public class FXMLDocumentController {
 
@@ -101,6 +114,179 @@ public class FXMLDocumentController {
     @FXML
     private GridPane grid8;
     
+
+    @FXML
+    private ImageView im00;
+
+    @FXML
+    private ImageView im10;
+
+    @FXML
+    private ImageView im20;
+
+    @FXML
+    private ImageView im30;
+
+    @FXML
+    private ImageView im40;
+
+    @FXML
+    private ImageView im50;
+
+    @FXML
+    private ImageView im60;
+
+     @FXML
+    private ImageView im01;
+
+    @FXML
+    private ImageView im11;
+
+    @FXML
+    private ImageView im21;
+
+    @FXML
+    private ImageView im31;
+
+    @FXML
+    private ImageView im41;
+
+    @FXML
+    private ImageView im61;
+
+    @FXML
+    private ImageView im51;
+
+    @FXML
+    private ImageView im02;
+
+    @FXML
+    private ImageView im12;
+
+    @FXML
+    private ImageView im22;
+
+    @FXML
+    private ImageView im32;
+
+    @FXML
+    private ImageView im42;
+
+    @FXML
+    private ImageView im52;
+
+    @FXML
+    private ImageView im62;
+
+     @FXML
+    private ImageView im03;
+
+    @FXML
+    private ImageView im13;
+
+    @FXML
+    private ImageView im23;
+
+    @FXML
+    private ImageView im33;
+
+    @FXML
+    private ImageView im43;
+
+    @FXML
+    private ImageView im53;
+
+    @FXML
+    private ImageView im63;
+
+    @FXML
+    private ImageView im04;
+
+    @FXML
+    private ImageView im14;
+
+    @FXML
+    private ImageView im24;
+
+    @FXML
+    private ImageView im34;
+
+    @FXML
+    private ImageView im44;
+
+    @FXML
+    private ImageView im54;
+
+    @FXML
+    private ImageView im64;
+
+    @FXML
+    private ImageView im05;
+
+    @FXML
+    private ImageView im15;
+
+    @FXML
+    private ImageView im25;
+
+    @FXML
+    private ImageView im35;
+
+    @FXML
+    private ImageView im45;
+
+    @FXML
+    private ImageView im55;
+
+    @FXML
+    private ImageView im65;
+
+    @FXML
+    private ImageView im06;
+
+    @FXML
+    private ImageView im16;
+
+    @FXML
+    private ImageView im26;
+
+    @FXML
+    private ImageView im36;
+
+    @FXML
+    private ImageView im46;
+
+    @FXML
+    private ImageView im56;
+
+    @FXML
+    private ImageView im66;
+
+    @FXML
+    private ImageView im07;
+
+    @FXML
+    private ImageView im17;
+
+    @FXML
+    private ImageView im27;
+
+    @FXML
+    private ImageView im37;
+
+    @FXML
+    private ImageView im47;
+
+    @FXML
+    private ImageView im57;
+
+    @FXML
+    private ImageView im67;
+    
+    @FXML
+    private BorderPane finestra;
+    public static ImageView[][] pane = new ImageView[8][7];
+    
     @FXML
     void loginStart(MouseEvent event) throws Exception{
         
@@ -140,14 +326,32 @@ public class FXMLDocumentController {
     @FXML
     void setContrast(ActionEvent event) {
     }
+    
+    @FXML
+    void multiplayerGameStart(ActionEvent event) throws Exception{
+        Parent pop = FXMLLoader.load(getClass().getResource("FXMLIniciSessio.fxml"));
+        
+        Scene pot = new Scene(pop);
+        
+        Stage pou = new Stage();
+        pou.setScene(pot);
+        pou.show();
+
+    }
+    
+    @FXML
+    void singlePlayerGameStart(ActionEvent event) {
+        TreballIPC.multiplayer = false;
+    }
 
     @FXML
-    void statsStart(MouseEvent event) {
-    }
+    void statsStart(MouseEvent event) {}
+    static    Image circle;
+    static    Image cross;
     
 
     public static SimpleBooleanProperty loggedIn = new SimpleBooleanProperty(false);
-
+    Retraso retraso;
     
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -178,22 +382,42 @@ public class FXMLDocumentController {
         assert vbox8 != null : "fx:id=\"vbox8\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert grid8 != null : "fx:id=\"grid8\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         
-        
+        circle = new Image(getClass().getResourceAsStream("circle.png"));
+        cross = new Image(getClass().getResourceAsStream("cross.png"));
+                
+        paneInit();
+        TreballIPC.multiplayer = false;
+        retraso = new Retraso();
+        retraso.setOnSucceeded((a) -> {});
+        retraso.setRetraso(1000);
+        panel.setDisable(false);
+
+                
         loggedIn.addListener( //EXEMPLE DE LISTENER!!!!
             (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
                 if(new_val.equals(true)) {
                     singleplayerButton.setVisible(true);
                     multiplayerButton.setVisible(true);
+                    singleplayerButton.setDisable(false);
+                    multiplayerButton.setDisable(false);
                     loginButton.setVisible(false);
                     registerButton.setVisible(false);
+                    loginButton.setDisable(true);
+                    registerButton.setDisable(true);
                     logoutButton.setVisible(true);
+                    logoutButton.setDisable(false);
                 }
                 else {
                     singleplayerButton.setVisible(false);
                     multiplayerButton.setVisible(false);
+                    singleplayerButton.setDisable(true);
+                    multiplayerButton.setDisable(true);
                     loginButton.setVisible(true);
                     registerButton.setVisible(true);
+                    loginButton.setDisable(false);
+                    registerButton.setDisable(false);
                     logoutButton.setVisible(false);
+                    logoutButton.setDisable(true);
                 }
         });
         
@@ -209,7 +433,9 @@ public class FXMLDocumentController {
                     }
                 }
                 });
-                }
+        
+        
+    }
     ///// funcions del panel de joc no es bonic pero es el que hi ha
     
     
@@ -222,138 +448,389 @@ public class FXMLDocumentController {
     SimpleBooleanProperty vbox7hover = new SimpleBooleanProperty(false);
     SimpleBooleanProperty vbox8hover = new SimpleBooleanProperty(false);
     
+    void setImage(int c, int f) {
+        if(f < 0) {return;}
+        if(TreballIPC.activePlayer == 1) {
+            pane[c][f].setImage(circle);
+        }
+        else if(TreballIPC.activePlayer == 2){
+            pane[c][f].setImage(cross);
+        }
+    }
+    
+    void runAI() {
+        if(!TreballIPC.multiplayer) {
+            
+            iters = new SimpleIntegerProperty(0);
+            timeing = 1;
+            waga = (0);
+            wagi = (0);
+            aiing = new SimpleBooleanProperty(true);
+            try {Thread.sleep(100);} catch (Exception e) {}
+            
+            while(iters.getValue() <3) {
+                waga = ((int)(Math.random()*8));
+            
+                
+                
+            }
+            
+            testnset(waga,wagi);
+        }
+    }
+    //no estan declarades dal per que si no no va
+    static int waga;
+    static int wagi;
+    static SimpleBooleanProperty aiing;
+    static int timeing;
+    static SimpleIntegerProperty iters;
+    
+ 
+// start the thread
+    
+    void testnset(int c,int f) {
+    
+        if(f == -1) {}
+        else { 
+            setImage(c,f);
+            
+            pane[c][f].setOpacity(1);
+            TreballIPC.state[c][f] = TreballIPC.activePlayer;
+            TreballIPC.activePlayer = (TreballIPC.activePlayer) % 2 +1;
+             if(TreballIPC.esFinalDeJoc(c,f) >= 4) {
+                 for(int i = 0; i < 8; i++) {
+                     for(int j = 0; j < 7; j++ ){
+                         pane[i][j].setImage(null);
+                         TreballIPC.state[i][j] = 0;
+                     }
+                 }
+             }
+             else {}
+        }
+    }
+    
     @FXML
     void vbox1click(MouseEvent event) {
+            int f = TreballIPC.buscarFila(0);
+            testnset(0,f);
+            runAI();
+            
+                
         
     }
 
     @FXML
     void vbox1hover(MouseEvent event) {
         vbox1hover.setValue(true);
+            int f = TreballIPC.buscarFila(0);
+            if(f < 0) {return; }
+        setImage(0,f);
+        pane[0][f].setOpacity(0.2);
     }
 
     @FXML
     void vbox1nohover(MouseEvent event) {
         
         vbox1hover.setValue(false);
+            int f = TreballIPC.buscarFila(0);
+            if(f < 0) {return; }
+            pane[0][f].setOpacity(1);
+        pane[0][f].setImage(null);
     }
 
     @FXML
     void vbox2click(MouseEvent event) {
+        int f = TreballIPC.clavarFitxa(1);
+            testnset(1,f);
+            runAI();
 
     }
 
     @FXML
     void vbox2hover(MouseEvent event) {
         vbox2hover.setValue(true);
+            int f = TreballIPC.buscarFila(1);
+            if(f < 0) {return; }
+        setImage(1,f);
+        pane[1][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox2nohover(MouseEvent event) {
         vbox2hover.setValue(false);
+            int f = TreballIPC.buscarFila(1);
+            if(f < 0) {return; }
+            pane[1][f].setOpacity(1);
+        pane[1][f].setImage(null);
 
     }
 
     @FXML
     void vbox3click(MouseEvent event) {
+        int f = TreballIPC.clavarFitxa(2);
+            testnset(2,f);
+            runAI();
 
     }
 
     @FXML
     void vbox3hover(MouseEvent event) {
         vbox3hover.setValue(true);
+            int f = TreballIPC.buscarFila(2);
+            if(f < 0) {return; }
+        setImage(2,f);
+        pane[2][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox3nohover(MouseEvent event) {
         vbox3hover.setValue(false);
+            int f = TreballIPC.buscarFila(2);
+            if(f < 0) {return; }
+            pane[2][f].setOpacity(1);
+        pane[2][f].setImage(null);
 
     }
 
     @FXML
     void vbox4click(MouseEvent event) {
+        int f = TreballIPC.clavarFitxa(3);
+            testnset(3,f);
+            runAI();
 
     }
 
     @FXML
     void vbox4hover(MouseEvent event) {
         vbox4hover.setValue(true);
+            int f = TreballIPC.buscarFila(3);
+            if(f < 0) { return; }
+        setImage(3,f);
+        pane[3][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox4nohover(MouseEvent event) {
         vbox4hover.setValue(false);
+            int f = TreballIPC.buscarFila(3);
+            if(f < 0) { return; }
+            pane[3][f].setOpacity(1);
+        pane[3][f].setImage(null);
 
     }
 
     @FXML
     void vbox5click(MouseEvent event) {
-
+        int f = TreballIPC.clavarFitxa(4);
+            testnset(4,f);
+            runAI();
     }
 
     @FXML
     void vbox5hover(MouseEvent event) {
         vbox5hover.setValue(true);
+            int f = TreballIPC.buscarFila(4);
+            if(f < 0) {return; }
+        setImage(4,f);
+        pane[4][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox5nohover(MouseEvent event) {
         vbox5hover.setValue(false);
+            int f = TreballIPC.buscarFila(4);
+            if(f < 0) {return; }
+            pane[4][f].setOpacity(1);
+        pane[4][f].setImage(null);
 
     }
 
     @FXML
     void vbox6click(MouseEvent event) {
+        
+        int f = TreballIPC.clavarFitxa(5);
+            testnset(5,f);
+            runAI();
 
     }
 
     @FXML
     void vbox6hover(MouseEvent event) {
         vbox6hover.setValue(true);
+            int f = TreballIPC.buscarFila(5);
+            if(f < 0) {return; }
+        setImage(5,f);
+        pane[5][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox6nohover(MouseEvent event) {
         vbox6hover.setValue(false);
+            int f = TreballIPC.buscarFila(5);
+            if(f < 0) {return; }
+            pane[5][f].setOpacity(1);
+        pane[5][f].setImage(null);
 
     }
 
     @FXML
     void vbox7click(MouseEvent event) {
+        int f = TreballIPC.clavarFitxa(6);
+            testnset(6,f);
+            runAI();
 
     }
 
     @FXML
     void vbox7hover(MouseEvent event) {
         vbox7hover.setValue(true);
+            int f = TreballIPC.buscarFila(6);
+            if(f < 0) {return; }
+        setImage(6,f);
+        pane[6][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox7nohover(MouseEvent event) {
         vbox7hover.setValue(false);
+            int f = TreballIPC.buscarFila(6);
+            if(f < 0) {return; }
+            pane[6][f].setOpacity(1);
+        pane[6][f].setImage(null);
 
     }
 
     @FXML
     void vbox8click(MouseEvent event) {
+        int f = TreballIPC.clavarFitxa(7);
+            testnset(7,f);
+            runAI();
 
     }
 
     @FXML
     void vbox8hover(MouseEvent event) {
         vbox8hover.setValue(true);
+            int f = TreballIPC.buscarFila(7);
+            if(f < 0) {return; }
+        setImage(7,f);
+        pane[7][f].setOpacity(0.2);
 
     }
 
     @FXML
     void vbox8nohover(MouseEvent event) {
         vbox8hover.setValue(false);
+            int f = TreballIPC.buscarFila(7);
+            if(f < 0) {return; }
+            pane[7][f].setOpacity(1);
+        pane[7][f].setImage(null);
 
+    }
+    public void paneInit() {
+        pane[0][0] = im00;
+        pane[0][1] = im10;
+        pane[0][2] = im20;
+        pane[0][3] = im30;
+        pane[0][4] = im40;
+        pane[0][5] = im50;
+        pane[0][6] = im60;
+        
+        pane[1][0] = im01;
+        pane[1][1] = im11;
+        pane[1][2] = im21;
+        pane[1][3] = im31;
+        pane[1][4] = im41;
+        pane[1][5] = im51;
+        pane[1][6] = im61;
+        
+        pane[2][0] = im02;
+        pane[2][1] = im12;
+        pane[2][2] = im22;
+        pane[2][3] = im32;
+        pane[2][4] = im42;
+        pane[2][5] = im52;
+        pane[2][6] = im62;
+        
+        pane[3][0] = im03;
+        pane[3][1] = im13;
+        pane[3][2] = im23;
+        pane[3][3] = im33;
+        pane[3][4] = im43;
+        pane[3][5] = im53;
+        pane[3][6] = im63;
+        
+        pane[4][0] = im04;
+        pane[4][1] = im14;
+        pane[4][2] = im24;
+        pane[4][3] = im34;
+        pane[4][4] = im44;
+        pane[4][5] = im54;
+        pane[4][6] = im64;
+        
+        pane[5][0] = im05;
+        pane[5][1] = im15;
+        pane[5][2] = im25;
+        pane[5][3] = im35;
+        pane[5][4] = im45;
+        pane[5][5] = im55;
+        pane[5][6] = im65;
+        
+        pane[6][0] = im06;
+        pane[6][1] = im16;
+        pane[6][2] = im26;
+        pane[6][3] = im36;
+        pane[6][4] = im46;
+        pane[6][5] = im56;
+        pane[6][6] = im66;
+        
+        pane[7][0] = im07;
+        pane[7][1] = im17;
+        pane[7][2] = im27;
+        pane[7][3] = im37;
+        pane[7][4] = im47;
+        pane[7][5] = im57;
+        pane[7][6] = im67;
+        
+    }
+}
+
+class Retraso extends Service<Void> {
+
+
+    private long delayMilis = 1000;
+
+
+    /* Get the value of retraso
+     *
+     * @return the value of retraso
+     */
+    public long getRetraso() {
+        return delayMilis;
+    }
+
+
+    /* Set the value of retraso
+     *
+     * @param retraso new value of retraso
+     */
+    public void setRetraso(long retraso) {
+        this.delayMilis = retraso;
+    }
+
+
+    protected Task<Void> createTask() {
+        return new Task<Void>() {
+            protected Void call() throws Exception {
+                Thread.sleep(delayMilis);
+                return null;
+            }
+        };
     }
 }
