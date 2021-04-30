@@ -34,6 +34,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 
 public class FXMLDocumentController {
@@ -287,6 +288,19 @@ public class FXMLDocumentController {
     private BorderPane finestra;
     public static ImageView[][] pane = new ImageView[8][7];
     
+    
+    @FXML
+    private Label j1;
+
+    @FXML
+    private Label p1;
+
+    @FXML
+    private Label j2;
+
+    @FXML
+    private Label p2;
+    
     @FXML
     void loginStart(MouseEvent event) throws Exception{
         
@@ -386,11 +400,19 @@ public class FXMLDocumentController {
         cross = new Image(getClass().getResourceAsStream("cross.png"));
                 
         paneInit();
+        panel.setOpacity(0.5);
         TreballIPC.multiplayer = false;
         retraso = new Retraso();
         retraso.setOnSucceeded((a) -> {});
         retraso.setRetraso(1000);
         panel.setDisable(false);
+                j1.setVisible(false);
+                j2.setVisible(false);
+                p1.setVisible(false);
+                p2.setVisible(false);
+        
+        
+            new Thread(aivsai).start();
 
                 
         loggedIn.addListener( //EXEMPLE DE LISTENER!!!!
@@ -403,7 +425,7 @@ public class FXMLDocumentController {
                     loginButton.setVisible(false);
                     registerButton.setVisible(false);
                     loginButton.setDisable(true);
-                    registerButton.setDisable(true);
+                    //registerButton.setDisable(true);
                     logoutButton.setVisible(true);
                     logoutButton.setDisable(false);
                 }
@@ -415,29 +437,50 @@ public class FXMLDocumentController {
                     loginButton.setVisible(true);
                     registerButton.setVisible(true);
                     loginButton.setDisable(false);
-                    registerButton.setDisable(false);
+                    //registerButton.setDisable(false);
                     logoutButton.setVisible(false);
                     logoutButton.setDisable(true);
                 }
         });
+        TreballIPC.playing.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(TreballIPC.playing.getValue()){
+                j1.setText(TreballIPC.j1.getNickName());
+                
+                j1.setVisible(true);
+                j2.setVisible(true);
+                p1.setVisible(true);
+                    paneInit();
+                    panel.setOpacity(1);
+                singleplayerButton.setVisible(false);
+                multiplayerButton.setVisible(false);
+                p1.setText((new Integer(TreballIPC.j1.getPoints())).toString());
+                if(TreballIPC.multiplayer) {
+                    j2.setText(TreballIPC.j2.getNickName());
+                    p2.setText((new Integer(TreballIPC.j2.getPoints())).toString());
+                    paneInit();
+                    panel.setOpacity(1);
+                    p2.setVisible(true);
+                }
+                else {j2.setText("Computer[RANDOM PLAYS]");}
+                
+                }
+            });
+
         
             
-        TreballIPC.playing.addListener(new ChangeListener(){
-                public void changed(ObservableValue o,Object oldVal, 
-                 Object newVal){
-                    if(TreballIPC.playing.getValue()) {
-                        panel.setDisable(false);
-                }
-                    else {
-                        panel.setDisable(true);
-                    }
-                }
-                });
+        
         
         
     }
-    ///// funcions del panel de joc no es bonic pero es el que hi ha
     
+    Runnable aivsai = () -> { while(!TreballIPC.playing.getValue()) {
+        runAI();
+        try{
+        wait();} catch (Exception e) {}
+    }};
+    ///// funcions del panel de joc no es bonic pero es el que hi ha
+    static boolean closed = false;
     
     SimpleBooleanProperty vbox1hover = new SimpleBooleanProperty(false);
     SimpleBooleanProperty vbox2hover = new SimpleBooleanProperty(false);
@@ -459,34 +502,49 @@ public class FXMLDocumentController {
     }
     
     void runAI() {
-        if(!TreballIPC.multiplayer) {
+        if((!TreballIPC.playing.getValue()||!TreballIPC.multiplayer) && !aiing) {
             
             iters = new SimpleIntegerProperty(0);
             timeing = 1;
             waga = (0);
             wagi = (0);
-            aiing = new SimpleBooleanProperty(true);
-            try {Thread.sleep(100);} catch (Exception e) {}
+            aiing = true;
             
-            while(iters.getValue() <3) {
-                waga = ((int)(Math.random()*8));
+            new Thread(task2).start();
             
-                
-                
-            }
-            
-            testnset(waga,wagi);
         }
     }
+    
+    
+    Runnable task2 = () -> { 
+            while(iters.getValue() <30) {
+                do {
+                waga = ((int)(Math.random()*8));
+                wagi = TreballIPC.buscarFila(waga);
+                } while(wagi < 0);
+                pane[waga][wagi].setOpacity(0.20);
+                setImage(waga,wagi);
+                
+                try{
+                Thread.sleep((int) timeing);}catch(Exception e){}
+                if(TreballIPC.playing.getValue()) {break;}
+                
+                iters.setValue(iters.getValue()+1);
+                timeing*=1.25;
+                pane[waga][wagi].setImage(null);
+                pane[waga][wagi].setOpacity(1);
+            }
+            if(!TreballIPC.playing.getValue()) {
+            testnset(waga,wagi); }
+                aiing = false;
+            aivsai.notifyAll();};
     //no estan declarades dal per que si no no va
     static int waga;
     static int wagi;
-    static SimpleBooleanProperty aiing;
-    static int timeing;
+    static boolean aiing;
+    static double timeing;
     static SimpleIntegerProperty iters;
     
- 
-// start the thread
     
     void testnset(int c,int f) {
     
@@ -511,227 +569,268 @@ public class FXMLDocumentController {
     
     @FXML
     void vbox1click(MouseEvent event) {
+        if(!aiing){
             int f = TreballIPC.buscarFila(0);
             testnset(0,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
+            }
             
-                
+        }
         
     }
 
     @FXML
     void vbox1hover(MouseEvent event) {
+        if(!aiing){
         vbox1hover.setValue(true);
             int f = TreballIPC.buscarFila(0);
             if(f < 0) {return; }
         setImage(0,f);
         pane[0][f].setOpacity(0.2);
+        }
     }
 
     @FXML
     void vbox1nohover(MouseEvent event) {
-        
+        if(!aiing){
         vbox1hover.setValue(false);
             int f = TreballIPC.buscarFila(0);
             if(f < 0) {return; }
             pane[0][f].setOpacity(1);
         pane[0][f].setImage(null);
+        }
     }
 
     @FXML
     void vbox2click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(1);
             testnset(1,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox2hover(MouseEvent event) {
+        if(!aiing){
         vbox2hover.setValue(true);
             int f = TreballIPC.buscarFila(1);
             if(f < 0) {return; }
         setImage(1,f);
         pane[1][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox2nohover(MouseEvent event) {
+        if(!aiing){
         vbox2hover.setValue(false);
             int f = TreballIPC.buscarFila(1);
             if(f < 0) {return; }
             pane[1][f].setOpacity(1);
         pane[1][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox3click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(2);
             testnset(2,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox3hover(MouseEvent event) {
+        if(!aiing){
         vbox3hover.setValue(true);
             int f = TreballIPC.buscarFila(2);
             if(f < 0) {return; }
         setImage(2,f);
         pane[2][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox3nohover(MouseEvent event) {
+        if(!aiing){
         vbox3hover.setValue(false);
             int f = TreballIPC.buscarFila(2);
             if(f < 0) {return; }
             pane[2][f].setOpacity(1);
         pane[2][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox4click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(3);
             testnset(3,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox4hover(MouseEvent event) {
+        if(!aiing){
         vbox4hover.setValue(true);
             int f = TreballIPC.buscarFila(3);
             if(f < 0) { return; }
         setImage(3,f);
         pane[3][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox4nohover(MouseEvent event) {
+        if(!aiing){
         vbox4hover.setValue(false);
             int f = TreballIPC.buscarFila(3);
             if(f < 0) { return; }
             pane[3][f].setOpacity(1);
         pane[3][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox5click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(4);
             testnset(4,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
+            }
+        }
     }
 
     @FXML
     void vbox5hover(MouseEvent event) {
+        if(!aiing){
         vbox5hover.setValue(true);
             int f = TreballIPC.buscarFila(4);
             if(f < 0) {return; }
         setImage(4,f);
         pane[4][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox5nohover(MouseEvent event) {
+        if(!aiing){
         vbox5hover.setValue(false);
             int f = TreballIPC.buscarFila(4);
             if(f < 0) {return; }
             pane[4][f].setOpacity(1);
         pane[4][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox6click(MouseEvent event) {
-        
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(5);
             testnset(5,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox6hover(MouseEvent event) {
+        if(!aiing){
         vbox6hover.setValue(true);
             int f = TreballIPC.buscarFila(5);
             if(f < 0) {return; }
         setImage(5,f);
         pane[5][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox6nohover(MouseEvent event) {
+        if(!aiing){
         vbox6hover.setValue(false);
             int f = TreballIPC.buscarFila(5);
             if(f < 0) {return; }
             pane[5][f].setOpacity(1);
         pane[5][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox7click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(6);
             testnset(6,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox7hover(MouseEvent event) {
+        if(!aiing){
         vbox7hover.setValue(true);
             int f = TreballIPC.buscarFila(6);
             if(f < 0) {return; }
         setImage(6,f);
         pane[6][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox7nohover(MouseEvent event) {
+        if(!aiing){
         vbox7hover.setValue(false);
             int f = TreballIPC.buscarFila(6);
             if(f < 0) {return; }
             pane[6][f].setOpacity(1);
         pane[6][f].setImage(null);
-
+        }
     }
 
     @FXML
     void vbox8click(MouseEvent event) {
+        if(!aiing){
         int f = TreballIPC.clavarFitxa(7);
             testnset(7,f);
+            if(!TreballIPC.multiplayer) {
             runAI();
-
+            }
+        }
     }
 
     @FXML
     void vbox8hover(MouseEvent event) {
+        if(!aiing){
         vbox8hover.setValue(true);
             int f = TreballIPC.buscarFila(7);
             if(f < 0) {return; }
         setImage(7,f);
         pane[7][f].setOpacity(0.2);
-
+        }
     }
 
     @FXML
     void vbox8nohover(MouseEvent event) {
+        if(!aiing){
         vbox8hover.setValue(false);
             int f = TreballIPC.buscarFila(7);
             if(f < 0) {return; }
             pane[7][f].setOpacity(1);
         pane[7][f].setImage(null);
-
+        }
     }
     public void paneInit() {
         pane[0][0] = im00;
@@ -797,6 +896,13 @@ public class FXMLDocumentController {
         pane[7][4] = im47;
         pane[7][5] = im57;
         pane[7][6] = im67;
+        
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 7; j++) {
+                pane[i][j].setImage(null);
+                TreballIPC.state[i][j] = 0;
+            }       
+        }
         
     }
 }
