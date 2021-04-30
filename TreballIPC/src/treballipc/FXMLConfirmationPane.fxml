@@ -3,15 +3,39 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLConfirmationPaneController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLConfirmationPaneController">
    <children>
-      <Label text="S'ha enviat un codi de confirmacio al teu email" />
-      <Label text="Introdueix-lo aci" />
-      <TextField fx:id="confirmationCode" promptText="Codi de Confirmacio" />
+      <Label text="S'ha enviat un codi de confirmacio al teu email" textFill="#e7d3af">
+         <font>
+            <Font name="Times New Roman" size="12.0" />
+         </font></Label>
+      <Label text="Introdueix-lo aci" textFill="#e7d3af">
+         <font>
+            <Font name="Times New Roman" size="12.0" />
+         </font></Label>
+      <TextField fx:id="confirmationCode" promptText="Codi de Confirmacio" style="-fx-background-color: dfdfdf;">
+         <font>
+            <Font name="Times New Roman" size="12.0" />
+         </font></TextField>
       <Label fx:id="errorMessage" textFill="RED" />
-      <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmAttempt" text="Confirmar" />
+      <HBox alignment="TOP_RIGHT">
+         <children>
+            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmAttempt" style="-fx-background-color: #2f2f2f; -fx-border-color: #4f4f4f;" text="Confirmar" textFill="#e7d3af">
+               <font>
+                  <Font name="Times New Roman" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="cancelButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #2f2f2f; -fx-border-color: #4f4f4f;" text="Cancellar" textFill="#e7d3af">
+               <font>
+                  <Font name="Times New Roman" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <Label fx:id="passAcces" onMouseEntered="#passShow" onMouseExited="#passHide" text="La contrasenya es:" textFill="ORANGE" visible="false" />
    </children>
 </VBox>

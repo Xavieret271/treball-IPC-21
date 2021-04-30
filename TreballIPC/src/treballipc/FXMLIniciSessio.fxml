@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="306.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLIniciSessioController">
+<VBox fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="306.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLIniciSessioController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -20,7 +20,7 @@
                   <Insets left="10.0" top="35.0" />
                </HBox.margin>
                <image>
-                  <Image url="@../images/icono%20Usuari.jpg" />
+                  <Image url="@../../../../treball-IPC-22/TreballIPC/src/treballipc/icono%20Usuari.jpg" />
                </image>
             </ImageView>
             <TextField fx:id="usernameField" cache="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="266.0" promptText="Nom Usuari">
@@ -41,7 +41,7 @@
                   <Insets left="10.0" top="1.0" />
                </HBox.margin>
                <image>
-                  <Image url="@../images/contraseña.jpg" />
+                  <Image url="@../../../../treball-IPC-22/TreballIPC/src/treballipc/contraseña.jpg" />
                </image>
             </ImageView>
             <PasswordField fx:id="passField" prefHeight="31.0" prefWidth="225.0" promptText="Contrasenya">
@@ -52,16 +52,16 @@
          </children>
       </HBox>
       <TextField fx:id="emailField" promptText="Correu Electronic" visible="false" />
-      <Label fx:id="forgotPassLink" onMouseClicked="#forgotPass" text="Has oblidat la contrasenya?" textFill="BLUE" underline="true">
+      <Label fx:id="forgotPassLink" onMouseClicked="#forgotPass" onMouseEntered="#oblitHover" onMouseExited="#oblitNoHover" text="Has oblidat la contrasenya?" textFill="BLUE" underline="true">
          <VBox.margin>
             <Insets left="30.0" />
          </VBox.margin></Label>
       <Label fx:id="errorMessage" text=" " textFill="RED" />
       <Label fx:id="advertLabel" text="S'enviara un correu electronic amb un codi per a la recuperacio" visible="false" wrapText="true" />
-      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #0f0f0f;">
         <items>
-          <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelWindow" text="Cancellar" />
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginAttm" text="Iniciar Sessio" />
+          <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelWindow" onMouseEntered="#cancelHover" onMouseExited="#cancelNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: e7d3af;" text="Cancellar" textFill="#e7d3af" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginAttm" onMouseEntered="#loginHover" onMouseExited="#loginNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="Iniciar Sessio" textFill="#e7d3af" />
         </items>
       </ToolBar>
    </children>

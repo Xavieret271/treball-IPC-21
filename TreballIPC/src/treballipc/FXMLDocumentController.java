@@ -8,6 +8,7 @@ import model.*;
 import java.io.File;
 import javafx.concurrent.Service;
 import java.net.URL;
+import java.util.List;
 import javafx.beans.value.ObservableValue;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 
 public class FXMLDocumentController {
 
@@ -300,6 +302,14 @@ public class FXMLDocumentController {
 
     @FXML
     private Label p2;
+    @FXML
+    private Label winnerLabel;
+    @FXML
+    private Button closingButton;
+    @FXML
+    void endMe(ActionEvent event) {
+                ((Stage) closingButton.getScene().getWindow()).close();
+    }
     
     @FXML
     void loginStart(MouseEvent event) throws Exception{
@@ -336,6 +346,7 @@ public class FXMLDocumentController {
     void logoutJ1(ActionEvent event) {
         loggedIn.setValue(false);
         TreballIPC.j1 = null;
+        TreballIPC.playing.setValue(false);
     }
     @FXML
     void setContrast(ActionEvent event) {
@@ -356,6 +367,8 @@ public class FXMLDocumentController {
     @FXML
     void singlePlayerGameStart(ActionEvent event) {
         TreballIPC.multiplayer = false;
+        TreballIPC.playing.setValue(true);
+        aiing = false;
     }
 
     @FXML
@@ -365,7 +378,6 @@ public class FXMLDocumentController {
     
 
     public static SimpleBooleanProperty loggedIn = new SimpleBooleanProperty(false);
-    Retraso retraso;
     
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -401,10 +413,8 @@ public class FXMLDocumentController {
                 
         paneInit();
         panel.setOpacity(0.5);
+        loggedIn.setValue(false);
         TreballIPC.multiplayer = false;
-        retraso = new Retraso();
-        retraso.setOnSucceeded((a) -> {});
-        retraso.setRetraso(1000);
         panel.setDisable(false);
                 j1.setVisible(false);
                 j2.setVisible(false);
@@ -444,13 +454,15 @@ public class FXMLDocumentController {
         });
         TreballIPC.playing.addListener( //EXEMPLE DE LISTENER!!!!
             (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                
+                    paneInit();
+                    try{((Thread) task2).interrupt();} catch(Exception e){}
                 if(TreballIPC.playing.getValue()){
                 j1.setText(TreballIPC.j1.getNickName());
                 
                 j1.setVisible(true);
                 j2.setVisible(true);
                 p1.setVisible(true);
-                    paneInit();
                     panel.setOpacity(1);
                 singleplayerButton.setVisible(false);
                 multiplayerButton.setVisible(false);
@@ -458,12 +470,23 @@ public class FXMLDocumentController {
                 if(TreballIPC.multiplayer) {
                     j2.setText(TreballIPC.j2.getNickName());
                     p2.setText((new Integer(TreballIPC.j2.getPoints())).toString());
-                    paneInit();
                     panel.setOpacity(1);
                     p2.setVisible(true);
                 }
                 else {j2.setText("Computer[RANDOM PLAYS]");}
+                    logoutButton.setVisible(true);
+                }
+                else {
                 
+                    j1.setVisible(false);
+                    j2.setVisible(false);
+                    p1.setVisible(false);
+                    p2.setVisible(false);
+                    paneInit();
+                    panel.setOpacity(0.5);
+                    loggedIn.setValue(false);
+                    
+                    (new Thread(aivsai)).start();
                 }
             });
 
@@ -502,7 +525,7 @@ public class FXMLDocumentController {
     }
     
     void runAI() {
-        if((!TreballIPC.playing.getValue()||!TreballIPC.multiplayer) && !aiing) {
+        if(!aiing &&(!TreballIPC.playing.getValue()||!TreballIPC.multiplayer)) {
             
             iters = new SimpleIntegerProperty(0);
             timeing = 1;
@@ -517,27 +540,26 @@ public class FXMLDocumentController {
     
     
     Runnable task2 = () -> { 
-            while(iters.getValue() <30) {
+            while(iters.getValue() <25) {
                 do {
                 waga = ((int)(Math.random()*8));
                 wagi = TreballIPC.buscarFila(waga);
                 } while(wagi < 0);
                 pane[waga][wagi].setOpacity(0.20);
                 setImage(waga,wagi);
-                
+                aiing = true;
                 try{
                 Thread.sleep((int) timeing);}catch(Exception e){}
-                if(TreballIPC.playing.getValue()) {break;}
+                pane[waga][wagi].setOpacity(1);
                 
                 iters.setValue(iters.getValue()+1);
                 timeing*=1.25;
                 pane[waga][wagi].setImage(null);
-                pane[waga][wagi].setOpacity(1);
             }
-            if(!TreballIPC.playing.getValue()) {
+            if(!TreballIPC.playing.getValue() || !TreballIPC.multiplayer) {
             testnset(waga,wagi); }
                 aiing = false;
-            aivsai.notifyAll();};
+            };
     //no estan declarades dal per que si no no va
     static int waga;
     static int wagi;
@@ -554,26 +576,92 @@ public class FXMLDocumentController {
             
             pane[c][f].setOpacity(1);
             TreballIPC.state[c][f] = TreballIPC.activePlayer;
-            TreballIPC.activePlayer = (TreballIPC.activePlayer) % 2 +1;
-             if(TreballIPC.esFinalDeJoc(c,f) >= 4) {
-                 for(int i = 0; i < 8; i++) {
-                     for(int j = 0; j < 7; j++ ){
+            int count = 0;
+            int i = 0;
+            int j = 0;
+            while(i < 8) {
+                j=0;
+                while(j < 7 && TreballIPC.state[i][j] != 0) {
+                    j++;
+                    count++;
+                }
+                i++;
+            }
+            List<ImageView> win = TreballIPC.esFinalDeJoc(c,f);
+             if(win.size() >= 4 || count >= 56) {
+                 if(TreballIPC.playing.getValue()) {
+                     winnerLabel.setVisible(true);
+                     endedGame = true;
+                     if(count >= 56) {
+                         winnerLabel.setText("Ha estat un empat");
+                     }
+                     else{
+                         try{
+                         if(TreballIPC.multiplayer) {
+                             String a = "ha estat el guanyador!";
+                             if(TreballIPC.activePlayer == 1) {
+                                 a = TreballIPC.j1.getNickName() + a;
+                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints() + 50);
+                             }
+                             else {a = TreballIPC.j2.getNickName() + a;
+                                 TreballIPC.j1.setPoints(TreballIPC.j2.getPoints() + 50);}
+                             
+                             winnerLabel.setText(a);
+                         }
+                         else {
+                             String a = "ha estat el guanyador!";
+                             if(TreballIPC.activePlayer == 1) {
+                                 a = TreballIPC.j1.getNickName() + a;
+                                 
+                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints() + 5);
+                             }
+                             else {
+                                 a = TreballIPC.j1.getNickName() + "has perdut :(";
+                                 
+                             }
+                             
+                             winnerLabel.setText(a);
+                             
+                         }
+                     }catch(Exception e) {}
+                     }
+                 }
+                 else{
+                 for(i = 0; i < 8; i++) {
+                     for(j = 0; j < 7; j++ ){
                          pane[i][j].setImage(null);
                          TreballIPC.state[i][j] = 0;
                      }
                  }
+                 }
              }
+             
              else {}
+             TreballIPC.activePlayer = (TreballIPC.activePlayer) % 2 +1;
         }
     }
+    boolean endedGame = false;
+    
+    
+    @FXML
+    void tryRegame(MouseEvent event) {
+        tryRegamee();
+    }
+    void tryRegamee() {
+        if(endedGame) {
+            paneInit();
+            endedGame=false;
+        }}
     
     @FXML
     void vbox1click(MouseEvent event) {
+        if(endedGame) {tryRegamee(); return;} else
         if(!aiing){
             int f = TreballIPC.buscarFila(0);
             testnset(0,f);
             if(!TreballIPC.multiplayer) {
-            runAI();
+            if(f>=0 && !aiing) {runAI();}
+            
             }
             
         }
@@ -604,10 +692,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox2click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(1);
             testnset(1,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&& !aiing && f >=0) {
             runAI();
             }
         }
@@ -637,10 +726,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox3click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(2);
             testnset(2,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer &&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -670,10 +760,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox4click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(3);
             testnset(3,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -703,10 +794,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox5click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(4);
             testnset(4,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -736,10 +828,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox6click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(5);
             testnset(5,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -769,10 +862,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox7click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(6);
             testnset(6,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -802,10 +896,11 @@ public class FXMLDocumentController {
 
     @FXML
     void vbox8click(MouseEvent event) {
+        if(endedGame) {tryRegamee();return;}else
         if(!aiing){
         int f = TreballIPC.clavarFitxa(7);
             testnset(7,f);
-            if(!TreballIPC.multiplayer) {
+            if(!TreballIPC.multiplayer&&f>=0 && !aiing) {
             runAI();
             }
         }
@@ -900,43 +995,58 @@ public class FXMLDocumentController {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 7; j++) {
                 pane[i][j].setImage(null);
+                pane[i][j].setOpacity(1);
                 TreballIPC.state[i][j] = 0;
             }       
         }
         
     }
+    
+
+    @FXML
+    void exitHover(MouseEvent event) {
+            closingButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+
+    }
+
+    @FXML
+    void exitNoHover(MouseEvent event) {
+            closingButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+
+    @FXML
+    void loginHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+
+    }
+
+    @FXML
+    void loginNoHover(MouseEvent event) {
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+    @FXML
+    void multiPlayerHover(MouseEvent event) {
+            multiplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+
+    }
+
+    @FXML
+    void multiPlayerNoHover(MouseEvent event) {
+            multiplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
+    @FXML
+    void singlePlayerHover(MouseEvent event) {
+            singleplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+
+    }
+
+    @FXML
+    void singlePlayerNoHover(MouseEvent event) {
+            singleplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+
+    }
 }
 
-class Retraso extends Service<Void> {
-
-
-    private long delayMilis = 1000;
-
-
-    /* Get the value of retraso
-     *
-     * @return the value of retraso
-     */
-    public long getRetraso() {
-        return delayMilis;
-    }
-
-
-    /* Set the value of retraso
-     *
-     * @param retraso new value of retraso
-     */
-    public void setRetraso(long retraso) {
-        this.delayMilis = retraso;
-    }
-
-
-    protected Task<Void> createTask() {
-        return new Task<Void>() {
-            protected Void call() throws Exception {
-                Thread.sleep(delayMilis);
-                return null;
-            }
-        };
-    }
-}

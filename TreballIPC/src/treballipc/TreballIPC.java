@@ -38,6 +38,7 @@ public class TreballIPC extends Application{
     static Player j2 = null;
     static Player retrievingJ = null;
     static boolean multiplayer = false;
+    static Scene scene;
     
     static int[][] state = new int[8][7];//////////////////////////////////////////////
     
@@ -53,7 +54,7 @@ public class TreballIPC extends Application{
         File file = new File("FXMLDocument.fxml");
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
-        Scene scene = new Scene(root);
+         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
         
@@ -125,7 +126,7 @@ public class TreballIPC extends Application{
        int i = 1;
        List<ImageView> res = new LinkedList<ImageView>();
        res.add(FXMLDocumentController.pane[c][f]);
-       while(c+i < 7 && state[c][f] == state[c+i][f]) {
+       while(c+i < 8 && state[c][f] == state[c+i][f]) {
            res.add(FXMLDocumentController.pane[c+i][f]);
            i++;
        }

@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class FXMLConfirmationPaneController {
@@ -29,13 +30,24 @@ public class FXMLConfirmationPaneController {
 
     @FXML // fx:id="confirmButton"
     private Button confirmButton; // Value injected by FXMLLoader
+    @FXML
+    private Label passAcces;
+    @FXML
+    private Button cancelButton;
 
+            String fixTxt = "La teua contrasenya d'acces és: ";
+            String pass = TreballIPC.retrievingJ.getPassword();
+            String hid = ""; 
     @FXML
     void confirmAttempt(ActionEvent event) {
         if(FXMLIniciSessioController.confirCode.getValue().equals(Integer.parseInt(confirmationCode.getText()))) {
             
             FXMLIniciSessioController.confirCode.setValue(FXMLIniciSessioController.confirCode.getValue()+1);
-            ((Stage) errorMessage.getScene().getWindow()).close();
+            passAcces.setVisible(true);
+            for(int i = 0; i < pass.length(); i++) {hid += "█";}
+            passAcces.setText(fixTxt + hid);
+            cancelButton.setText("Tancar");
+            confirmButton.setVisible(false);
         }
         else {
             errorMessage.setText("El codi introduit no es correpon amb el que s'ha enviat");
@@ -48,5 +60,24 @@ public class FXMLConfirmationPaneController {
         assert confirmationCode != null : "fx:id=\"confirmationCode\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
         assert errorMessage != null : "fx:id=\"errorMessage\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
         assert confirmButton != null : "fx:id=\"confirmButton\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
+    }
+    
+    
+
+    @FXML
+    void passHide(MouseEvent event) {
+        passAcces.setText(fixTxt + hid);
+    }
+
+    @FXML
+    void passShow(MouseEvent event) {
+
+        passAcces.setText(fixTxt + pass);
+    }
+    @FXML
+    void cancel(ActionEvent event) {
+        TreballIPC.retrievingJ = null;
+        
+                    ((Stage) cancelButton.getScene().getWindow()).close();
     }
 }
