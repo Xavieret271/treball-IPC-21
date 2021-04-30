@@ -32,7 +32,6 @@ public class FXMLConfirmationCodeController {
             FXMLIniciSessioController.confirCode.addListener(new ChangeListener(){
                 public void changed(ObservableValue o,Object oldVal, 
                  Object newVal){
-            FXMLDocumentController.loggedIn.setValue(true);
             ((Stage) confirmationCode.getScene().getWindow()).close();
         }
       });
