@@ -5,6 +5,7 @@
 package treballipc;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import model.Player;
+import javafx.scene.image.*;
 
 public class FXMLRegistreController {
 
@@ -89,21 +92,30 @@ public class FXMLRegistreController {
 
     @FXML
     void cancelAction(ActionEvent event) {
-
+        
+            ((Stage) CancelButton.getScene().getWindow()).close();
     }
 
     @FXML
     void registerAttempt(ActionEvent event) throws Exception {
         boolean registerOK = true;
+        
+        LocalDate dob = null;
+        
         if(usernameField.getText().equals("")) {
             registerOK = false;
             registerError.setText("Es necessita un nom d'usuari");
+        
+        }
+        if(!Player.checkNickName(usernameField.getText())) {
+            registerOK = false;
+            registerError.setText("Es necessita un nom d'usuari valid");
         }
         else if(emailField.getText().equals("")) {
             registerOK = false;
             registerError.setText("Es necessita un correu electronic");
         }
-        else if(emailField.getText().indexOf('@') > 0 && emailField.getText().indexOf('.') > emailField.getText().indexOf('@')) {
+        else if(!Player.checkEmail(emailField.getText())) {
             registerError.setText("Es necessita un correu electronic valid");
             registerOK = false;
         }
@@ -111,29 +123,46 @@ public class FXMLRegistreController {
             registerError.setText("Es necessita una contrasenya");
             registerOK = false;
         }
-        else if(!PasswordField.getText().equals(ConfirmPasswordField.getText())) {
+        else if(!Player.checkPassword(PasswordField.getText())) {
+            registerOK = false;
+            registerError.setText("Les contrasenyes ha de complir els següents requisits: \n"
+                    + "\t-Entre 8 i 20 caracters \n"
+                    + "\t-Contenir com a minim una lletra majuscula \n"
+                    + "\t-Contenir com a minim una lletra minuscula \n"
+                    + "\t-Contenir com a minim un digit (0-9) \n"
+                    + "\t-Contenir com a minim un d'aquests caracters: !@#$%&*()-+=  \n"
+                    + "\t-NO Contenir cap espai en blanc");
+        }
+        else 
+            if(!PasswordField.getText().equals(ConfirmPasswordField.getText())) {
             registerOK = false;
             registerError.setText("Les contrasenyes no coincideixen");
         }
-        
         else try {
-            DateOBField.getValue();
+            dob = DateOBField.getValue();
         }
         catch(Exception e) {
             registerOK = false;
             registerError.setText("S'ha d'incloure una data vàlida");
         }
         
+        if(dob != null && dob.compareTo(LocalDate.now().minusYears(12)) > 0) {
+            registerOK = false;
+            registerError.setText("No es pot haver nascut en el futur");
+        }
+        
         if(registerOK) {
-            registerError.setText("");
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLConfirmationPane.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
+            registerError.setText("Usuari registrat amb exit!");
+            CancelButton.setText("Tancar");
+            registerButton.setVisible(false);
+            
+            TreballIPC.game.registerPlayer(usernameField.getText(), emailField.getText(), PasswordField.getText(), fotos[avatar], dob, 0);
+            
         }
     }
 
+        static int avatar = 0;
+        static Image[] fotos = new Image[5];
     void initialize() {
         assert usernameField != null : "fx:id=\"usernameField\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
         assert emailField != null : "fx:id=\"emailField\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
@@ -149,5 +178,9 @@ public class FXMLRegistreController {
         assert CancelButton != null : "fx:id=\"CancelButton\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
         assert registerError != null : "fx:id=\"registerError\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
 
+        fotos[0] = new Image(getClass().getResourceAsStream("default.png"));
+        for(int i= 1; i < 5; i++) {
+            fotos[i] = new Image(getClass().getResourceAsStream("avatar" + i + ".png"));
+        }
     }
 }

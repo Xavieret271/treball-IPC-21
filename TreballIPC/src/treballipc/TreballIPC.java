@@ -51,12 +51,12 @@ public class TreballIPC extends Application{
         game.removeAllData();
         game.createDemoData(6,10,10);
         
+        File file = new File("FXMLDocument.fxml");
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
          scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        stage.setTitle("Conecta-4: El joc mes esperat");
         
     }
 

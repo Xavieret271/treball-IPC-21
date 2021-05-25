@@ -56,7 +56,9 @@ public class FXMLIniciSessioController {
 
     @FXML
     void cancelWindow(ActionEvent event) {
+            
             ((Stage) cancelButton.getScene().getWindow()).close();
+            
     }
     static boolean forgot = false;
     static SimpleIntegerProperty confirCode = new SimpleIntegerProperty(0);
@@ -178,12 +180,12 @@ public class FXMLIniciSessioController {
     }
     @FXML
     void oblitNoHover(MouseEvent event) {
-            forgotPassLink.setStyle("-fx-text-fill:BLUE");
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     @FXML
     void oblitHover(MouseEvent event) {
-            forgotPassLink.setStyle("-fx-text-fill:#8A2BE2");
+            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
 }
