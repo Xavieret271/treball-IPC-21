@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedAreaChart?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -17,7 +21,16 @@
    <center>
       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab fx:id="partidesTab" text="Partides">
+            <Tab closable="false" text="Ranking">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="rankingList" fixedCellSize="60.0" prefHeight="377.0" prefWidth="600.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+          <Tab fx:id="partidesTab" closable="false" text="Partides">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -42,10 +55,35 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="dadesTab" text="Dades">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
+          <Tab fx:id="dadesTab" closable="false" text="Dades">
+               <content>
+                  <VBox fx:id="vboxgraf" prefHeight="0.0" prefWidth="0.0">
+                     <children>
+                        <MenuButton fx:id="modePick" mnemonicParsing="false" text="Guanyades i Perdudes">
+                          <items>
+                            <MenuItem fx:id="winnlose" mnemonicParsing="false" onAction="#contarPerdudesIGuanyades" text="Guanyades i Perdudes" />
+                            <MenuItem fx:id="opoContar" mnemonicParsing="false" onAction="#contarOpos" text="Nre Oponents" />
+                          </items>
+                        </MenuButton>
+                        <BarChart fx:id="bars" focusTraversable="true" maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="10000.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                        <StackedAreaChart fx:id="chart" alternativeColumnFillVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="10000.0" title="Partides Realitzades">
+                          <xAxis>
+                            <CategoryAxis animated="false" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis animated="false" side="LEFT" />
+                          </yAxis>
+                        </StackedAreaChart>
+                     </children>
+                  </VBox>
+               </content>
           </Tab>
         </tabs>
       </TabPane>
