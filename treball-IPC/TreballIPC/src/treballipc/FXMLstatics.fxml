@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLstaticsController">
+   <center>
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="partidesTab" text="Partides">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0" prefHeight="377.0" prefWidth="600.0" stylesheets="@clear.css">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="labelPartides" text="Filtrar partides" />
+                                    <MenuButton fx:id="filtrePartides" mnemonicParsing="false" onAction="#seleccionarFiltrePartides" text="Guanyades i Perdudes">
+                                      <items>
+                                          <MenuItem fx:id="allVisible" mnemonicParsing="false" onAction="#showAll" text="Totes Visibles" />
+                                        <MenuItem fx:id="onlyWins" mnemonicParsing="false" onAction="#showWin" text="Sols Guanyades" />
+                                        <MenuItem fx:id="onlyLost" mnemonicParsing="false" onAction="#showLost" text="Sols Perdudes" />
+                                      </items>
+                                    </MenuButton>
+                                 </children>
+                              </VBox>
+                              <ListView fx:id="list" fixedCellSize="1.0" prefHeight="200.0" prefWidth="600.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="dadesTab" text="Dades">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <top>
+      <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Label text="Data d'inici" />
+                  <DatePicker fx:id="dataInici" onAction="#iniciDate" promptText="1/1/1900" />
+               </children>
+            </VBox>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Label text="Data de Fi" />
+                  <DatePicker fx:id="dataFi" onAction="#fiDate" promptText="Hui" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="Filtre d'usuari" />
+                  <TextField fx:id="filtreUsuari" onAction="#usuariConfirmat" promptText="Sense Filtre" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </top>
+   <stylesheets>
+      <URL value="@clear.css" />
+      <URL value="@dark.css" />
+   </stylesheets>
+</BorderPane>

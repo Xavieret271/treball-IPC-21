@@ -1,0 +1,37 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25-may-2021, 20:52:45
+    Author     : Mattor
+*/
+
+.root{
+    border-color-button: #e7d3af;
+    clear-color: white;
+    contrast-clear-color: #AEBDC8;
+    -fx-background-color: clear-color; 
+    border-color: #e7d3af
+}
+.label{
+    -fx-text-fill: black;
+    
+}
+.button{
+    -fx-background-color: contrast-clear-color;
+    -fx-text-fill: black;
+    -fx-border-color: border-color-button;
+    
+    
+}
+.tool-bar{
+  -fx-background-color: clear-color;
+    
+}
+.text_field{
+   -fx-background-color: contrast-clear-color; 
+    
+}
+
