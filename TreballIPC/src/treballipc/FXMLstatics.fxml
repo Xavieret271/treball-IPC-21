@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLstaticsController">
+<BorderPane fx:id="window" stylesheets="@dark.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLstaticsController">
    <center>
       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -89,7 +89,7 @@
       </TabPane>
    </center>
    <top>
-      <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefWidth="200.0" stylesheets="@dark.css" BorderPane.alignment="CENTER">
          <children>
             <VBox prefWidth="100.0">
                <children>

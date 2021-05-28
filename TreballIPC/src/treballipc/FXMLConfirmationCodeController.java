@@ -15,16 +15,10 @@ import static treballipc.FXMLDocumentController.loggedIn;
 
 public class FXMLConfirmationCodeController {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="confirmationCode"
     private Label confirmationCode; // Value injected by FXMLLoader
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+@FXML
     void initialize() {
         assert confirmationCode != null : "fx:id=\"confirmationCode\" was not injected: check your FXML file 'FXMLConfirmationCode.fxml'.";
         
@@ -34,7 +28,37 @@ public class FXMLConfirmationCodeController {
                  Object newVal){
             ((Stage) confirmationCode.getScene().getWindow()).close();
         }
+                
+               
       });
-
+            inicialitzarEstil();
     }
+    
+    void inicialitzarEstil() {
+        
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    confirmationCode.getStylesheets().clear();
+                    confirmationCode.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    confirmationCode.getStylesheets().clear();
+                    confirmationCode.getStylesheets().add(e);
+                }
+            FXMLDocumentController.dark.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    confirmationCode.getStylesheets().clear();
+                    confirmationCode.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    confirmationCode.getStylesheets().clear();
+                    confirmationCode.getStylesheets().add(e);
+                }
+            });
+    }
+    
 }

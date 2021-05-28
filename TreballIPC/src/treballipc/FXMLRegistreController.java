@@ -7,6 +7,7 @@ package treballipc;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.Player;
 import javafx.scene.image.*;
+import javafx.scene.layout.VBox;
+import static treballipc.FXMLDocumentController.dark;
 
 public class FXMLRegistreController {
 
@@ -64,6 +67,8 @@ public class FXMLRegistreController {
     
     @FXML // fx:id="registerError"
     private Label registerError; // Value injected by FXMLLoader
+    @FXML
+    private VBox window;
 
     @FXML
     void av1Select(MouseEvent event) {
@@ -111,6 +116,10 @@ public class FXMLRegistreController {
             registerOK = false;
             registerError.setText("Es necessita un nom d'usuari valid");
         }
+        if(!TreballIPC.game.exitsNickName(usernameField.getText())) {
+            registerOK = false;
+            registerError.setText("Nom d'usuari ja registrat");
+        }
         else if(emailField.getText().equals("")) {
             registerOK = false;
             registerError.setText("Es necessita un correu electronic");
@@ -119,11 +128,11 @@ public class FXMLRegistreController {
             registerError.setText("Es necessita un correu electronic valid");
             registerOK = false;
         }
-        else if(PasswordField.getText().equals("")) {
+        else if(PasswordField.getText().equals("") || FXMLDocumentController.modifying == 1) {
             registerError.setText("Es necessita una contrasenya");
             registerOK = false;
         }
-        else if(!Player.checkPassword(PasswordField.getText())) {
+        else if(!(PasswordField.getText().equals("") && FXMLDocumentController.modifying == 1) && !Player.checkPassword(PasswordField.getText())) {
             registerOK = false;
             registerError.setText("Les contrasenyes ha de complir els següents requisits: \n"
                     + "\t-Entre 8 i 20 caracters \n"
@@ -156,13 +165,23 @@ public class FXMLRegistreController {
             CancelButton.setText("Tancar");
             registerButton.setVisible(false);
             
-            TreballIPC.game.registerPlayer(usernameField.getText(), emailField.getText(), PasswordField.getText(), fotos[avatar], dob, 0);
+            if(FXMLDocumentController.modifying == 0) {
+            TreballIPC.game.registerPlayer(usernameField.getText(), emailField.getText(), PasswordField.getText(), fotos[avatar], dob, 0); }
+            else {
+                Player juga = TreballIPC.game.getPlayer(usernameField.getText());
+                juga.setBirthdate(dob);
+                juga.setEmail(emailField.getText());
+                if(PasswordField.getText() != "") {
+                juga.setPassword(PasswordField.getText()); }
+                //juga.setAvatar(avatar);
+            }
             
         }
     }
 
         static int avatar = 0;
         static Image[] fotos = new Image[5];
+        @FXML
     void initialize() {
         assert usernameField != null : "fx:id=\"usernameField\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
         assert emailField != null : "fx:id=\"emailField\" was not injected: check your FXML file 'FXMLRegistre.fxml'.";
@@ -182,5 +201,51 @@ public class FXMLRegistreController {
         for(int i= 1; i < 5; i++) {
             fotos[i] = new Image(getClass().getResourceAsStream("avatar" + i + ".png"));
         }
+        
+        inicialitzarEstil();
+        if(FXMLDocumentController.modifying == 1) {
+            inicialitzarModif();
+        }
     }
+    
+    void inicialitzarModif() {
+        Player juga = TreballIPC.j1;
+        usernameField.setText(juga.getNickName());
+        usernameField.setDisable(true);
+        emailField.setText(juga.getEmail());
+        ConfirmPasswordField.setPromptText("Confirmar Nova Contrasenya");
+        PasswordField.setPromptText("Nova Contrasenya");
+        DateOBField.setValue(juga.getBirthdate());
+        
+        registerButton.setText("Modificar");
+        
+    }
+    
+    void inicialitzarEstil() {
+        
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            FXMLDocumentController.dark.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            });
+    }
+    
 }

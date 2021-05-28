@@ -6,21 +6,19 @@ package treballipc;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import static treballipc.FXMLDocumentController.dark;
 
 public class FXMLConfirmationPaneController {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="confirmationCode"
     private TextField confirmationCode; // Value injected by FXMLLoader
@@ -39,6 +37,8 @@ public class FXMLConfirmationPaneController {
             String pass = TreballIPC.retrievingJ.getPassword();
             String hid = ""; 
     @FXML
+    private VBox window;
+    @FXML
     void confirmAttempt(ActionEvent event) {
         if(FXMLIniciSessioController.confirCode.getValue().equals(Integer.parseInt(confirmationCode.getText()))) {
             
@@ -53,13 +53,41 @@ public class FXMLConfirmationPaneController {
             errorMessage.setText("El codi introduit no es correpon amb el que s'ha enviat");
         }
     }
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+@FXML
     void initialize() {
         
         assert confirmationCode != null : "fx:id=\"confirmationCode\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
         assert errorMessage != null : "fx:id=\"errorMessage\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
         assert confirmButton != null : "fx:id=\"confirmButton\" was not injected: check your FXML file 'FXMLConfirmationPane.fxml'.";
+        
+        inicialitzarEstil();
+    }
+    
+    void inicialitzarEstil() {
+        
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            FXMLDocumentController.dark.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            });
     }
     
     

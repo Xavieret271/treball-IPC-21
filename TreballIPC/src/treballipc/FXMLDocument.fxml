@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -15,16 +16,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLDocumentController">
+<BorderPane fx:id="mainBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treballipc.FXMLDocumentController">
    <left>
-      <ToolBar maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="334.0" prefWidth="100.0" style="-fx-background-color: #1f1f1f;" BorderPane.alignment="CENTER">
+      <ToolBar maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="334.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <items>
-            <Button fx:id="registerButton" disable="true" mnemonicParsing="false" onMouseClicked="#registerOpen" style="-fx-background-color: #1f1f1f; -fx-border-color: #e7d3af;" text="Registrar-se" textFill="#e7d3af" />
-            <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#loginStart" onMouseEntered="#loginHover" onMouseExited="#loginNoHover" style="-fx-border-color: #e7d3af; -fx-background-color: #2f2f2f;" text="Iniciar Sessio" textFill="#e7d3af" />
+            <Button fx:id="registerButton" disable="true" mnemonicParsing="false" onMouseClicked="#registerOpen" text="Registrar-se" textFill="#e7d3af" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#loginStart" onMouseEntered="#loginHover" onMouseExited="#loginNoHover" text="Iniciar Sessio" textFill="#e7d3af" />
             <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#singlePlayerGameStart" onMouseEntered="#singlePlayerHover" onMouseExited="#singlePlayerNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="1 Jugador" textFill="#e7d3af" visible="false" />
             <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#multiplayerGameStart" onMouseEntered="#multiPlayerHover" onMouseExited="#multiPlayerNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="2 Jugadors" textFill="#e7d3af" visible="false" />
             <Pane prefHeight="134.0" prefWidth="86.0" />
-            <Button fx:id="staticsButton" disable="true" mnemonicParsing="false" onMouseClicked="#statsStart" style="-fx-background-color: #1f1f1f; -fx-border-color: #e7d3af;" text="Estadistiques" textFill="#e7d3af" />
+            <Button fx:id="staticsButton" disable="true" mnemonicParsing="false" onMouseClicked="#statsStart" text="Estadistiques" textFill="#e7d3af" />
             <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutJ1" style="-fx-border-color: #e7d3af; -fx-background-color: #2f2f2f;" text="Tancar Sessio" textFill="#e7d3af" visible="false" />
             <CheckBox fx:id="highContrast" disable="true" mnemonicParsing="false" onAction="#setContrast" selected="true" style="-fx-region-border: #e7d3af;" text="Alt Contrast" textFill="#e7d3af" />
             <Button fx:id="closingButton" mnemonicParsing="false" onAction="#endMe" onMouseEntered="#exitHover" onMouseExited="#exitNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="Tancar" textFill="#e7d3af" />
@@ -310,4 +311,8 @@
          </children>
       </VBox>
    </center>
+   <stylesheets>
+      <URL value="@clear.css" />
+      <URL value="@dark.css" />
+   </stylesheets>
 </BorderPane>

@@ -1,0 +1,98 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25-may-2021, 20:57:42
+    Author     : Mattor
+*/
+
+.root{
+    border-color-button: #e7d3af;
+     background-button-color:  #2f2f2f;
+    dark-color: #000000;
+    contrast-dark-color: #2F5776;
+    -fx-background-color: dark-color; 
+    
+    
+    
+    -tab-text-color: -fx-text-base-color ;
+}
+.button{
+    
+    -fx-border-color: border-color-button;
+    -fx-background-color: background-button-color;
+    
+    
+}
+
+.tool-bar{
+  -fx-background-color: dark-color;
+    
+}
+.label{
+    -fx-text-fill: white;
+    
+}
+.text_field{
+   -fx-background-color: contrast-dark-color; 
+    
+}
+.text-input{
+    -fx-background-color: contrast-dark-color; 
+    -fx-text-fill: white;
+}
+.Tab_Partides{
+    -fx-background-color: black;
+    
+    
+}
+
+.list_view{
+    
+    
+    -fx-background-color: black;
+}
+.menu-button { 
+-fx-background-color:black;
+-fx-border-color: #EABE3F;
+} 
+
+
+.menu-item:focused { 
+    -fx-background-color: darkgray; 
+} 
+
+.menu-item:focused .label { 
+    -fx-text-fill: blue; 
+} 
+.context-menu { 
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin"; 
+    -fx-background-color: black; 
+    -fx-background-insets: 0, 1, 2; 
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4; 
+/* -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em; 8 1 8 1 */ 
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */ 
+} 
+
+
+.tab-label {
+
+}
+-Border_Pane{
+    -fx-background-color: black;
+    
+    
+}
+.tab-pane {
+    -fx-background-color: black;
+}
+
+
+.list-view {
+-fx-background-color: black;
+}
+
+
+

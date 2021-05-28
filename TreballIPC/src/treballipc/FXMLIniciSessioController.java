@@ -20,17 +20,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import static treballipc.FXMLDocumentController.dark;
 
 public class FXMLIniciSessioController {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="window"
-    private VBox window; // Value injected by FXMLLoader
+    public VBox window; // Value injected by FXMLLoader
 
     @FXML // fx:id="usernameField"
     private TextField usernameField; // Value injected by FXMLLoader
@@ -142,8 +139,7 @@ public class FXMLIniciSessioController {
         }
         }
     }
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
         assert window != null : "fx:id=\"window\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
         assert usernameField != null : "fx:id=\"usernameField\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
@@ -152,6 +148,9 @@ public class FXMLIniciSessioController {
         assert errorMessage != null : "fx:id=\"errorMessage\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
         assert loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'FXMLIniciSessio.fxml'.";
             forgot = false;
+            
+            inicialitzarEstil();
+            
     }
     @FXML
     void cancelHover(MouseEvent event) {
@@ -187,5 +186,32 @@ public class FXMLIniciSessioController {
     void oblitHover(MouseEvent event) {
             loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
+    }
+    
+    void inicialitzarEstil() {
+        
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            FXMLDocumentController.dark.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(FXMLDocumentController.dark.getValue()) {
+                    String e = "treballipc/dark.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+                else {
+                    String e = "treballipc/clear.css";
+                    window.getStylesheets().clear();
+                    window.getStylesheets().add(e);
+                }
+            });
     }
 }

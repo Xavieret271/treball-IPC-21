@@ -4,18 +4,14 @@
 
 package treballipc;
 
-import model.*;
-import java.io.File;
-import javafx.concurrent.Service;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,13 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.ImageView;
  import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Line;
 
 public class FXMLDocumentController {
 
@@ -307,9 +297,15 @@ public class FXMLDocumentController {
     @FXML
     private Button closingButton;
     @FXML
+    private BorderPane mainBox;
+    @FXML
     void endMe(ActionEvent event) {
                 //task.interrupt();
-                ai.interrupt();
+                Thread[] a = new Thread[10];
+                Thread[] www = Thread.getAllStackTraces().keySet().toArray(a);
+                for(int i = 0; i < www.length; i++) {
+                    www[i].interrupt();
+                }
                 ((Stage) closingButton.getScene().getWindow()).close();
     }
     
@@ -350,8 +346,11 @@ public class FXMLDocumentController {
         TreballIPC.j1 = null;
         TreballIPC.playing.setValue(false);
     }
+    
+    public static SimpleBooleanProperty dark = new SimpleBooleanProperty(true);
     @FXML
     void setContrast(ActionEvent event) {
+        dark.setValue(highContrast.isSelected());
     }
     
     @FXML
@@ -374,6 +373,8 @@ public class FXMLDocumentController {
 
     @FXML
     void statsStart(MouseEvent event) throws Exception{
+        ai.suspend();
+        
         Parent pop = FXMLLoader.load(getClass().getResource("FXMLstatics.fxml"));
         
         Scene pot = new Scene(pop);
@@ -385,7 +386,7 @@ public class FXMLDocumentController {
     }
     static    Image circle;
     static    Image cross;
-    
+ 
 
     public static SimpleBooleanProperty loggedIn = new SimpleBooleanProperty(false);
     
@@ -422,10 +423,13 @@ public class FXMLDocumentController {
         cross = new Image(getClass().getResourceAsStream("cross.png"));
                 
         paneInit();
+                    String d = "treballipc/dark.css";
+                    mainBox.getStylesheets().add(d);
         panel.setOpacity(0.5);
         loggedIn.setValue(false);
         TreballIPC.multiplayer = false;
         registerButton.setDisable(false);
+        highContrast.setDisable(false);
         panel.setDisable(false);
                 j1.setVisible(false);
                 j2.setVisible(false);
@@ -445,9 +449,9 @@ public class FXMLDocumentController {
                     singleplayerButton.setDisable(false);
                     multiplayerButton.setDisable(false);
                     loginButton.setVisible(false);
-                    registerButton.setVisible(false);
+                    registerButton.setText("Modificar Perfil");
+                    modifying = 1;
                     loginButton.setDisable(true);
-                    registerButton.setDisable(true);
                     logoutButton.setVisible(true);
                     logoutButton.setDisable(false);
                 }
@@ -457,9 +461,10 @@ public class FXMLDocumentController {
                     singleplayerButton.setDisable(true);
                     multiplayerButton.setDisable(true);
                     loginButton.setVisible(true);
-                    registerButton.setVisible(true);
                     loginButton.setDisable(false);
-                    registerButton.setDisable(false);
+                    
+                    registerButton.setText("Registrar");
+                    modifying = 0;
                     logoutButton.setVisible(false);
                     logoutButton.setDisable(true);
                 }
@@ -477,7 +482,8 @@ public class FXMLDocumentController {
                 p1.setVisible(true);
                     panel.setOpacity(1);
                 singleplayerButton.setVisible(false);
-                multiplayerButton.setVisible(false);
+                multiplayerButton.setText("Modificar Perfil");
+                modifying = 1;
                 p1.setText((new Integer(TreballIPC.j1.getPoints())).toString());
                 if(TreballIPC.multiplayer) {
                     j2.setText(TreballIPC.j2.getNickName());
@@ -506,10 +512,24 @@ public class FXMLDocumentController {
 
         
             
+        dark.addListener( //EXEMPLE DE LISTENER!!!!
+            (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                if(dark.getValue()) {
+                    s = "treballipc/dark.css";
+                    mainBox.getStylesheets().clear();
+                    mainBox.getStylesheets().add(s);
+                }
+                else {
+                    s = "treballipc/clear.css";
+                    mainBox.getStylesheets().clear();
+                    mainBox.getStylesheets().add(s);
+                }
+            });
         
         
     }
-    
+    static int modifying = 0;
+    static String s = "treballipc/dark.css";
     static Thread ai;
     Runnable aivsai = () -> { while(!TreballIPC.playing.getValue()) {
         runAI();
@@ -542,7 +562,7 @@ public class FXMLDocumentController {
         if(!aiing &&(!TreballIPC.playing.getValue()||!TreballIPC.multiplayer)) {
             
             iters = new SimpleIntegerProperty(0);
-            timeing = 1;
+            timeing = 10;
             waga = (0);
             wagi = (0);
             aiing = true;
@@ -550,12 +570,12 @@ public class FXMLDocumentController {
             //task = new Thread(task2);
                     
             //task.start();            
-            task2.run();
+            task2();
         }
     }
     static Thread task;
     
-    Runnable task2 = () -> { 
+    void task2(){ 
             while(iters.getValue() <15) {
                 do {
                 waga = ((int)(Math.random()*8));
@@ -575,7 +595,7 @@ public class FXMLDocumentController {
             if(!TreballIPC.playing.getValue() || !TreballIPC.multiplayer) {
             testnset(waga,wagi); }
                 aiing = false;
-            };
+            }
     //no estan declarades dal per que si no no va
     static int waga;
     static int wagi;
