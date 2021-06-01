@@ -19,11 +19,20 @@ and open the template in the editor.
     -fx-text-fill: black;
     
 }
+.checkbox {
+    -fx-text-fill: black;
+    
+}
 .button{
     -fx-background-color: contrast-clear-color;
     -fx-text-fill: black;
     -fx-border-color: border-color-button;
     
+    
+}
+
+.button:hover {
+    -fx-background-color: #CEDDF8;
     
 }
 .tool-bar{
@@ -32,6 +41,6 @@ and open the template in the editor.
 }
 .text_field{
    -fx-background-color: contrast-clear-color; 
-    
+    -fx-border-color: lightgray;
 }
 

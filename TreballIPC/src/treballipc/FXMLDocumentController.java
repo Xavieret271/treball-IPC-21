@@ -5,6 +5,7 @@
 package treballipc;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
@@ -373,7 +374,6 @@ public class FXMLDocumentController {
 
     @FXML
     void statsStart(MouseEvent event) throws Exception{
-        ai.suspend();
         
         Parent pop = FXMLLoader.load(getClass().getResource("FXMLstatics.fxml"));
         
@@ -482,7 +482,6 @@ public class FXMLDocumentController {
                 p1.setVisible(true);
                     panel.setOpacity(1);
                 singleplayerButton.setVisible(false);
-                multiplayerButton.setText("Modificar Perfil");
                 modifying = 1;
                 p1.setText((new Integer(TreballIPC.j1.getPoints())).toString());
                 if(TreballIPC.multiplayer) {
@@ -490,10 +489,12 @@ public class FXMLDocumentController {
                     p2.setText((new Integer(TreballIPC.j2.getPoints())).toString());
                     panel.setOpacity(1);
                     p2.setVisible(true);
+                    multiplayerButton.setVisible(false);
                 }
                 else {j2.setText("Computer[RANDOM PLAYS]");}
                     logoutButton.setVisible(true);
                     panel.setOpacity(1);
+                    multiplayerButton.setVisible(true);
                 }
                 else {
                 
@@ -518,12 +519,17 @@ public class FXMLDocumentController {
                     s = "treballipc/dark.css";
                     mainBox.getStylesheets().clear();
                     mainBox.getStylesheets().add(s);
+        circle = new Image(getClass().getResourceAsStream("circle.png"));
+        cross = new Image(getClass().getResourceAsStream("cross.png"));
                 }
                 else {
                     s = "treballipc/clear.css";
                     mainBox.getStylesheets().clear();
                     mainBox.getStylesheets().add(s);
+        circle = new Image(getClass().getResourceAsStream("circle_clear.png"));
+        cross = new Image(getClass().getResourceAsStream("cross_clear.png"));
                 }
+                reloadMap();
             });
         
         
@@ -612,7 +618,7 @@ public class FXMLDocumentController {
             winnerLabel.setVisible(false);
             
             pane[c][f].setOpacity(1);
-            TreballIPC.state[c][f] = TreballIPC.activePlayer;
+            TreballIPC.state[c][f] = TreballIPC.activePlayer+1;
             int count = 0;
             int i = 0;
             int j = 0;
@@ -638,10 +644,17 @@ public class FXMLDocumentController {
                              String a = "ha estat el guanyador!";
                              if(TreballIPC.activePlayer == 1) {
                                  a = TreballIPC.j1.getNickName() + a;
-                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints() + 50);
+                                 TreballIPC.game.regiterRound(LocalDateTime.now(), TreballIPC.j1, TreballIPC.j2);
+                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints()+50);
                              }
                              else {a = TreballIPC.j2.getNickName() + a;
-                                 TreballIPC.j2.setPoints(TreballIPC.j2.getPoints() + 50);}
+                             try {
+                             
+                                 TreballIPC.game.regiterRound(LocalDateTime.now(), TreballIPC.j2, TreballIPC.j1); }
+                             catch (Exception e) {}
+                             
+                                 TreballIPC.j2.setPoints(TreballIPC.j2.getPoints()+50);
+                             } 
                              
                              winnerLabel.setText(a);
                          }
@@ -649,8 +662,8 @@ public class FXMLDocumentController {
                              String a = "ha estat el guanyador!";
                              if(TreballIPC.activePlayer == 1) {
                                  a = TreballIPC.j1.getNickName() + a;
+                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints()+5);
                                  
-                                 TreballIPC.j1.setPoints(TreballIPC.j1.getPoints() + 5);
                              }
                              else {
                                  a = TreballIPC.j1.getNickName() + "has perdut :(";
@@ -1044,48 +1057,59 @@ public class FXMLDocumentController {
 
     @FXML
     void exitHover(MouseEvent event) {
-            closingButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+            //closingButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
 
     }
 
     @FXML
     void exitNoHover(MouseEvent event) {
-            closingButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+           // closingButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
 
     @FXML
     void loginHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+         //   loginButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
 
     }
 
     @FXML
     void loginNoHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+          //  loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     @FXML
     void multiPlayerHover(MouseEvent event) {
-            multiplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+         //   multiplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
 
     }
 
     @FXML
     void multiPlayerNoHover(MouseEvent event) {
-            multiplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+          //  multiplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     @FXML
     void singlePlayerHover(MouseEvent event) {
-            singleplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
+          //  singleplayerButton.setStyle("-fx-background-color: #3f3f3f;-fx-border-color: #e7d3af");
 
     }
 
     @FXML
     void singlePlayerNoHover(MouseEvent event) {
-            singleplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+           // singleplayerButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
+    
+    void reloadMap() {
+        for(int i = 0; i < TreballIPC.state.length; i++) {
+            for(int j = 0; j < TreballIPC.state[0].length; j++) {
+                if(TreballIPC.state[i][j] == 0) {}
+                if(TreballIPC.state[i][j] == 3) {pane[i][j].setImage(cross);}
+                if(TreballIPC.state[i][j] == 2) {pane[i][j].setImage(circle);}
+            }
+        }
+    }
+    
 }
 

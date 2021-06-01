@@ -124,6 +124,7 @@ public class FXMLstaticsController {
         recalcularGraf();
         if(filtreUsuari.getText().equals("")) {
             filtrePartides.setDisable(true);
+            filtrePartides.setText("Partides Jugades");
             
             modePick.setDisable(true);
         }
@@ -195,7 +196,7 @@ public class FXMLstaticsController {
     
     
     void inicialitzarEstil() {
-        
+        dataInici.setPromptText(LocalDate.now().minusYears(1).toString());
                 if(FXMLDocumentController.dark.getValue()) {
                     String e = "treballipc/dark.css";
                     window.getStylesheets().clear();
@@ -225,7 +226,7 @@ public class FXMLstaticsController {
         calcularRanking();
         System.out.println("recalc");
         
-            LocalDate starting = LocalDate.now().minusYears(50); //Suposarem que fa 50 anys i un dia aquest programa no es podia correr
+            LocalDate starting = LocalDate.now().minusYears(1); //Suposarem que fa 50 anys i un dia aquest programa no es podia correr
             if(dataInici.getValue() != null) {
                 starting = dataInici.getValue();
             }
@@ -357,6 +358,8 @@ public class FXMLstaticsController {
         b.add(new StackedAreaChart.Data<String,Integer>("",0));
         
         if(filtreUsuari.getText().equals("")) {
+            
+        chart.setTitle("Partides Jugades en el Sistema");
         for(;starting.compareTo(ending)<= 0; starting = starting.plusDays(1)) {
             Integer c = t.get(starting);
             if(c == null) { c = 0; }
@@ -389,6 +392,8 @@ public class FXMLstaticsController {
                 } 
                 
             }
+            
+            chart.setTitle("Partides Guanyades/Perdudes");
             
         }
             
@@ -429,6 +434,7 @@ public class FXMLstaticsController {
         bars.getData().clear();
         bars.getData().add(s);
         bars.getData().get(0).setName("Nre Oponents");
+        bars.setTitle("Nre Oponents Diaris");
     }
     
     void recuadrarSpai() {
@@ -471,7 +477,6 @@ public class FXMLstaticsController {
     
     HBox crearPosicioRank(Player p, int i) {
         HBox res = new HBox();
-        res.setStyle("-fx-background-color: black;");
         
         ImageView f = new ImageView(p.getAvatar());
         f.setFitHeight(60);

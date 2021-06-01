@@ -23,7 +23,12 @@ and open the template in the editor.
     
     -fx-border-color: border-color-button;
     -fx-background-color: background-button-color;
+    -fx-text-fill: white;
     
+}
+
+.button:hover {
+    -fx-background-color: #4f4f4f;
     
 }
 
@@ -39,6 +44,11 @@ and open the template in the editor.
    -fx-background-color: contrast-dark-color; 
     
 }
+
+.tab-pane *.tab-header-area *.tab-header-background {
+  -fx-background-color:transparent;
+}
+
 .text-input{
     -fx-background-color: contrast-dark-color; 
     -fx-text-fill: white;
@@ -90,8 +100,50 @@ and open the template in the editor.
 }
 
 
+.tab {
+  -fx-background-color: contrast-dark-color ;
+}
+
+.tab:hover {
+    -fx-background-color: #4f7796;
+}
+
+.tab-label {
+    -fx-text-fill: white;
+}
+
+.tab:selected {
+    -fx-background-color: black ;
+}
+
+.tab:active {
+  -fx-border-color: contrast-dark-color ;
+    
+}
+
 .list-view {
 -fx-background-color: black;
+-fx-border-color: border-color-button;
+}
+
+.list-cell {
+-fx-background-color: black;
+-fx-text-fill: white;
+-fx-border-color: #2f2f2f;
+}
+
+
+.chart-legend {
+   -fx-background-color:  contrast-dark-color;
+}
+
+.chart-plot-background {
+        -fx-background-color: contrast-dark-color;
+        
+}
+
+.chart-vertical-grid-lines {
+        -fx-stroke: #3F6786;
 }
 
 

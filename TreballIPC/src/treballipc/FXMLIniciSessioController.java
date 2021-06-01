@@ -120,15 +120,20 @@ public class FXMLIniciSessioController {
                     TreballIPC.j1 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
                 
                     FXMLDocumentController.loggedIn.setValue(true);
+                errorMessage.setText("");
                     ((Stage) cancelButton.getScene().getWindow()).close();
                 }
                 else {
+                    if(usernameField.getText().equals(TreballIPC.j1.getNickName())) {
+                        errorMessage.setText("El mateix usuari no pot iniciar sessió dues vegades simultaniament");
+                        return;
+                    }
                     TreballIPC.j2 = TreballIPC.game.loginPlayer(usernameField.getText(), passField.getText());
                     TreballIPC.multiplayer = true;
                     TreballIPC.playing.setValue(true);
+                errorMessage.setText("");
                     ((Stage) cancelButton.getScene().getWindow()).close();
                 }
-                errorMessage.setText("");
             }
             else{
                 errorMessage.setText("L'usuari i la contrasenya no coincideixen");
@@ -154,37 +159,37 @@ public class FXMLIniciSessioController {
     }
     @FXML
     void cancelHover(MouseEvent event) {
-            cancelButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
+            //cancelButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
 
     }
     
     @FXML
     void cancelNoHover(MouseEvent event) {
-            cancelButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+            //cancelButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     
     
     @FXML
     void loginHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
+            //loginButton.setStyle("-fx-background-color: #4f4f4f;-fx-border-color: #e7d3af");
 
     }
     
     
     @FXML
     void loginNoHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+            //loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     @FXML
     void oblitNoHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+            //loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     @FXML
     void oblitHover(MouseEvent event) {
-            loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
+           // loginButton.setStyle("-fx-background-color: #2f2f2f;-fx-border-color: #e7d3af");
 
     }
     

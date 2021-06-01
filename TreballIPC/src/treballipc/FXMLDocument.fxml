@@ -22,13 +22,13 @@
          <items>
             <Button fx:id="registerButton" disable="true" mnemonicParsing="false" onMouseClicked="#registerOpen" text="Registrar-se" textFill="#e7d3af" />
             <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#loginStart" onMouseEntered="#loginHover" onMouseExited="#loginNoHover" text="Iniciar Sessio" textFill="#e7d3af" />
-            <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#singlePlayerGameStart" onMouseEntered="#singlePlayerHover" onMouseExited="#singlePlayerNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="1 Jugador" textFill="#e7d3af" visible="false" />
-            <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#multiplayerGameStart" onMouseEntered="#multiPlayerHover" onMouseExited="#multiPlayerNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="2 Jugadors" textFill="#e7d3af" visible="false" />
+            <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#singlePlayerGameStart" onMouseEntered="#singlePlayerHover" onMouseExited="#singlePlayerNoHover" text="1 Jugador" textFill="#e7d3af" visible="false" />
+            <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#multiplayerGameStart" onMouseEntered="#multiPlayerHover" onMouseExited="#multiPlayerNoHover" text="2 Jugadors" textFill="#e7d3af" visible="false" />
             <Pane prefHeight="134.0" prefWidth="86.0" />
             <Button fx:id="staticsButton" disable="true" mnemonicParsing="false" onMouseClicked="#statsStart" text="Estadistiques" textFill="#e7d3af" />
-            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutJ1" style="-fx-border-color: #e7d3af; -fx-background-color: #2f2f2f;" text="Tancar Sessio" textFill="#e7d3af" visible="false" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutJ1" text="Tancar Sessio" textFill="#e7d3af" visible="false" />
             <CheckBox fx:id="highContrast" disable="true" mnemonicParsing="false" onAction="#setContrast" selected="true" style="-fx-region-border: #e7d3af;" text="Alt Contrast" textFill="#e7d3af" />
-            <Button fx:id="closingButton" mnemonicParsing="false" onAction="#endMe" onMouseEntered="#exitHover" onMouseExited="#exitNoHover" style="-fx-background-color: #2f2f2f; -fx-border-color: #e7d3af;" text="Tancar" textFill="#e7d3af" />
+            <Button fx:id="closingButton" mnemonicParsing="false" onAction="#endMe" onMouseEntered="#exitHover" onMouseExited="#exitNoHover" text="Tancar" textFill="#e7d3af" />
          </items>
       </ToolBar>
    </left>
